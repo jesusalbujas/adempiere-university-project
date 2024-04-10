@@ -1,0 +1,189 @@
+name: template-vue
+
+# Example API for images
+services:
+
+  postgresql.service:
+    container_name: ${POSTGRES_HOST}
+    ports: 
+    - ${POSTGRES_PORT}:5432
+    image: ${POSTGRES_IMAGE}
+    restart: ${GENERIC_RESTART}
+    volumes:
+      - ${VOLUME_POSTGRES}:/var/lib/postgresql/data
+      - ./postgresql/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+      - ./postgresql/seed.backup:/tmp/seed.backup
+      - ./postgresql/after_run:/tmp/after_run
+    healthcheck:
+      test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/127.0.0.1/5432; exit $?;'"
+      interval: 10s
+      retries: 60
+      start_period: 20s
+      timeout: 10s
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - shared_network
+
+  adempiere.site:
+    image: ${ADEMPIERE_SITE_IMAGE}
+    container_name: ${ADEMPIERE_SITE_HOST}
+    restart: ${GENERIC_RESTART}
+    # ports:
+    #   - ${ADEMPIERE_SITE_PORT}:80
+    environment:
+      ZK_HOST: ${ADEMPIERE_SITE_ZK_HOST}
+      VUE_HOST: ${ADEMPIERE_SITE_VUE_HOST}
+    networks:
+      - shared_network
+
+  adempiere.zk:
+    image: ${ADEMPIERE_ZK_IMAGE}
+    container_name: ${ADEMPIERE_ZK_HOST}
+    restart: ${GENERIC_RESTART}
+    healthcheck:
+      test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/postgresql.service/5432; exit $?;'"
+      interval: 10s
+      retries: 60
+      start_period: 20s
+      timeout: 10s
+    environment:
+      ADEMPIERE_DB_SERVER: ${ADEMPIERE_ZK_DB_HOST}
+      ADEMPIERE_DB_NAME: ${ADEMPIERE_ZK_DB_NAME}
+      ADEMPIERE_DB_USER: ${ADEMPIERE_ZK_DB_USER}
+      ADEMPIERE_DB_PASSWORD: ${ADEMPIERE_ZK_DB_PASSWORD}
+      ADEMPIERE_ZK_DB_PORT: ${ADEMPIERE_ZK_DB_PORT}
+    networks:
+      - shared_network
+
+  adempiere.grpc.server:
+    image: ${GRPC_SERVER_IMAGE}
+    container_name: ${GRPC_SERVER_HOST}
+    restart: ${GENERIC_RESTART}
+    healthcheck:
+      test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/postgresql.service/5432; exit $?;'"
+      interval: 10s
+      retries: 60
+      start_period: 20s
+      timeout: 10s
+    environment:
+      SERVER_PORT: ${GRPC_SERVER_PORT}
+      DB_HOST: ${GRPC_SERVER_DB_HOST}
+      DB_PORT: ${GRPC_SERVER_DB_PORT}
+      DB_NAME: ${GRPC_SERVER_DB_NAME}
+      DB_USER: ${GRPC_SERVER_DB_USER}
+      DB_PASSWORD: ${GRPC_SERVER_DB_PASSWORD}
+      JWT_SECRET_KEY: ${GRPC_SERVER_JWT_SECRET_KEY}
+    networks:
+      - shared_network
+
+  grpc.proxy:
+    image: ${GRPC_PROXY_BACKEND_IMAGE}
+    container_name: ${GRPC_PROXY_HOST}
+    healthcheck:
+      test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/127.0.0.1/${GRPC_PROXY_BACKEND_PORT}; exit $?;'"
+      interval: 10s
+      retries: 60
+      start_period: 20s
+      timeout: 10s
+    environment:
+      SERVER_PORT: ${GRPC_PROXY_BACKEND_PORT}
+      BACKEND_HOST: ${GRPC_PROXY_BACKEND_HOST}
+      BACKEND_PORT: ${GRPC_PROXY_BACKEND_SERVER_PORT}
+    networks:
+    - shared_network
+
+  vue.ui:
+    image: ${VUE_UI_IMAGE}
+    container_name: ${VUE_UI_HOST}
+    restart: ${GENERIC_RESTART}
+    environment:
+      API_URL: ${VUE_UI_API_URL}
+      PUBLIC_PATH: ${VUE_UI_PUBLIC_PATH}
+    networks:
+      - shared_network
+
+  ui.gateway:
+    image: ${GATEWAY_IMAGE}
+    container_name: ${GATEWAY_HOST}
+    depends_on:
+      grpc.proxy:
+        condition: service_healthy
+      adempiere.site:
+        condition: service_started
+    ports:
+      - ${GATEWAY_PORT}:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/upstreams/:/etc/nginx/api_upstreams_conf.d
+      - ./nginx/api/:/etc/nginx/api_conf.d
+      - ./nginx/gateway/api_gateway.conf:/etc/nginx/api_gateway.conf
+      - ./nginx/api_json_errors.conf:/etc/nginx/api_json_errors.conf
+    networks:
+      - shared_network
+
+  s3.storage:
+    image: ${S3_IMAGE}
+    container_name: ${S3_HOST}
+    restart: ${GENERIC_RESTART}
+    command:
+      - "server"
+      - "/data"
+      - "--console-address=:${S3_CONSOLE_PORT}"
+    healthcheck:
+      test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/127.0.0.1/9000; exit $?;'"
+      interval: 10s
+      retries: 60
+      start_period: 20s
+      timeout: 10s
+    environment:
+      MINIO_ROOT_USER: ${S3_USER}
+      MINIO_ROOT_PASSWORD: ${S3_PASSWORD}
+    volumes:
+      - ${VOLUME_S3}:/data
+    ports:
+      - ${S3_EXTERNAL_PORT}:9000
+      - ${S3_CONSOLE_EXTERNAL_PORT}:${S3_CONSOLE_PORT}
+    networks:
+      - shared_network
+
+  s3.client:
+    image: ${S3_CLIENT_IMAGE}
+    container_name: ${S3_CLIENT_HOST}
+    depends_on:
+      s3.storage:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set s3_minio_server http://s3.storage:9000 ${S3_CLIENT_ACCESS_KEY} ${S3_CLIENT_SECRET_KEY};
+      /usr/bin/mc mb s3_minio_server/${S3_CLIENT_BUCKET_NAME} || true;
+      exit 0;
+      "
+    networks:
+      - shared_network
+
+  keycloak:
+    image: ${KEYCLOAK_IMAGE}
+    container_name: ${KEYCLOAK_HOST}
+    restart: ${GENERIC_RESTART}
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      DB_VENDOR: ${KEYCLOAK_DB_VENDOR}
+      DB_ADDR: ${KEYCLOAK_DB_HOST}
+      DB_DATABASE: ${KEYCLOAK_DB_DATABASE}
+      DB_SCHEMA: ${KEYCLOAK_DB_SCHEMA}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_SERVER: ${SERVER_NAME}
+    command: "start-dev --import-realm"
+    ports:
+      - ${KEYCLOAK_PORT}:8080
+    volumes:
+      - ./keycloak/master-realm.json:/opt/keycloak/data/import/master-realm.json
+      - ./keycloak/adempiere-realm.json:/opt/keycloak/data/import/adempiere-realm.json
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    name: ${DEFAULT_NETWORK}

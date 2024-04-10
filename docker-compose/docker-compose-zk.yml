@@ -1,0 +1,50 @@
+version: "3.9"
+
+name: erp-auth
+
+# Example API for images
+services:
+  adempiere.zk:
+    image: ${ADEMPIERE_ZK_IMAGE}
+    container_name: ${ADEMPIERE_ZK_HOST}
+    restart: ${GENERIC_RESTART}
+    healthcheck:
+      test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/postgresql.service/5432; exit $?;'"
+      interval: 10s
+      retries: 60
+      start_period: 20s
+      timeout: 10s
+    environment:
+      ADEMPIERE_DB_SERVER: ${ADEMPIERE_ZK_DB_HOST}
+      ADEMPIERE_DB_NAME: ${ADEMPIERE_ZK_DB_NAME}
+      ADEMPIERE_DB_USER: ${ADEMPIERE_ZK_DB_USER}
+      ADEMPIERE_DB_PASSWORD: ${ADEMPIERE_ZK_DB_PASSWORD}
+      ADEMPIERE_ZK_DB_PORT: ${ADEMPIERE_ZK_DB_PORT}
+    networks:
+      - shared_network
+
+  keycloak:
+    image: ${KEYCLOAK_IMAGE}
+    container_name: ${KEYCLOAK_HOST}
+    restart: ${GENERIC_RESTART}
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      DB_VENDOR: ${KEYCLOAK_DB_VENDOR}
+      DB_ADDR: ${KEYCLOAK_DB_HOST}
+      DB_DATABASE: ${KEYCLOAK_DB_DATABASE}
+      DB_SCHEMA: ${KEYCLOAK_DB_SCHEMA}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_SERVER: ${SERVER_NAME}
+    command: "start-dev --import-realm"
+    ports:
+      - ${KEYCLOAK_PORT}:8080
+    volumes:
+      - ./keycloak/master-realm.json:/opt/keycloak/data/import/master-realm.json
+      - ./keycloak/adempiere-realm.json:/opt/keycloak/data/import/adempiere-realm.json
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    name: ${DEFAULT_NETWORK}
