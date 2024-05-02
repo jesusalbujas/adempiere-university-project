@@ -181,7 +181,7 @@ services:
     volumes:
       - ./keycloak/master-realm.json:/opt/keycloak/data/import/master-realm.json
       - ./keycloak/adempiere-realm.json:/opt/keycloak/data/import/adempiere-realm.json
-      # - ./keycloak/keycloak-theme/:/opt/keycloak/themes/keycloak-theme
+      - ./keycloak/university-theme/:/opt/keycloak/themes/university-theme
     networks:
       - shared_network
 
