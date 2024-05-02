@@ -36,6 +36,10 @@ Usando shell
 ./install_tools.sh
 ```
 
+## Demo
+
+![ADempiere Demo](./docs/ADempiere_demo.gif)
+
 ## Configurando Entorno de Trabajo
 
 ¡Esta aplicación descarga las imágenes requeridas, ejecuta los contenedores configurados y restaura la base de datos en su máquina local simplemente levantando el Docker Compose!
