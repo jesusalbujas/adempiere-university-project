@@ -33,7 +33,7 @@
   "registrationEmailAsUsername" : false,
   "rememberMe" : true,
   "verifyEmail" : false,
-  "loginWithEmailAllowed" : true,
+  "loginWithEmailAllowed" : false,
   "duplicateEmailsAllowed" : false,
   "resetPasswordAllowed" : true,
   "editUsernameAllowed" : true,
@@ -396,6 +396,7 @@
     "containerId" : "026351f5-1537-4e28-8c35-b247a40ad394"
   },
   "requiredCredentials" : [ "password" ],
+  "passwordPolicy" : "forceExpiredPasswordChange(180) and specialChars(2)",
   "otpPolicyType" : "totp",
   "otpPolicyAlgorithm" : "HmacSHA1",
   "otpPolicyInitialCounter" : 0,
@@ -428,6 +429,29 @@
   "webAuthnPolicyPasswordlessAcceptableAaguids" : [ ],
   "webAuthnPolicyPasswordlessExtraOrigins" : [ ],
   "users" : [ {
+    "id" : "e83508e7-fa3e-4429-bebd-3881ba9b8552",
+    "createdTimestamp" : 1714608791942,
+    "username" : "dperez@adempiere.io",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "Daniel",
+    "lastName" : "Pérez",
+    "email" : "dperez@adempiere.io",
+    "credentials" : [ {
+      "id" : "f9b73a1a-1332-4c75-a55f-f8514ac66190",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1714611751393,
+      "secretData" : "{\"value\":\"Aql5yTUD6vUSl+4YOnrSDw9PM9gR0RWapy9VyeN72ys=\",\"salt\":\"dx4FbkoM6kEgDJZcn2DgLw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "realmRoles" : [ "default-roles-adempiere" ],
+    "notBefore" : 0,
+    "groups" : [ "/adempiere" ]
+  }, {
     "id" : "96b00810-b399-4c6c-8de3-ba9d324a1f08",
     "createdTimestamp" : 1707403404308,
     "username" : "gardenadmin",
@@ -468,6 +492,104 @@
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-adempiere", "Garden World User" ],
+    "notBefore" : 0,
+    "groups" : [ "/adempiere" ]
+  }, {
+    "id" : "d15b9a36-f01e-4e00-ba6b-60d112cf4354",
+    "createdTimestamp" : 1714607206213,
+    "username" : "ggarrido@adempiere.io",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "Giovanna",
+    "lastName" : "Garrido",
+    "email" : "ggarrido@adempiere.io",
+    "attributes" : {
+      "terms_and_conditions" : [ "1714607225" ]
+    },
+    "credentials" : [ {
+      "id" : "3247a17d-8292-4bb2-a419-80578f3e78a9",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1714611762216,
+      "secretData" : "{\"value\":\"feWIJq9PBqM8PvFW7TpMh7MTmKy1eQTbhOeYESYIXsQ=\",\"salt\":\"pCpUKyw+88BmHU7P+YFd3Q==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "realmRoles" : [ "default-roles-adempiere" ],
+    "notBefore" : 0,
+    "groups" : [ "/adempiere" ]
+  }, {
+    "id" : "5a641a98-99fc-40b4-9513-63a392c11347",
+    "createdTimestamp" : 1714606007755,
+    "username" : "jalbujas@adempiere.io",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "Jesús",
+    "lastName" : "Albujas",
+    "email" : "jalbujas@adempiere.io",
+    "attributes" : {
+      "terms_and_conditions" : [ "1714608019" ]
+    },
+    "credentials" : [ {
+      "id" : "3b013a0c-21d7-42ac-9e84-77e17f823668",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1714611694954,
+      "secretData" : "{\"value\":\"jR1Z9bMARlV/Q0DyPZY7/ajXOF8UpFqro2MDYkEmKrE=\",\"salt\":\"K2VUQ9EBqs+kE7iPvDLf7Q==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "realmRoles" : [ "default-roles-adempiere" ],
+    "notBefore" : 0,
+    "groups" : [ "/adempiere" ]
+  }, {
+    "id" : "58d754df-8d6c-4496-b70a-8a248055c2f6",
+    "createdTimestamp" : 1714608710415,
+    "username" : "jhernandez@adempiere.io",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "Jesús",
+    "lastName" : "Hernández",
+    "email" : "jhernandez@adempiere.io",
+    "credentials" : [ {
+      "id" : "ee9aa445-7c69-4a47-b74f-ca8e63dbed1b",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1714608717014,
+      "secretData" : "{\"value\":\"1p0wd2DjMGkwyuobUBRtlyBMMojocEHwZ381fuydrMQ=\",\"salt\":\"LKdj56fIFnkAeojXypio8g==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "realmRoles" : [ "default-roles-adempiere" ],
+    "notBefore" : 0,
+    "groups" : [ "/adempiere" ]
+  }, {
+    "id" : "3a6a8537-6fe6-4ce2-8eae-54fbad9f0664",
+    "createdTimestamp" : 1714608453260,
+    "username" : "jzuñiga@adempiere.io",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "José",
+    "lastName" : "Zúñiga",
+    "email" : "jzuñiga@adempiere.io",
+    "credentials" : [ {
+      "id" : "22dd38ba-59c6-427d-ad7f-7e3e9f84d9f7",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1714608618617,
+      "secretData" : "{\"value\":\"NvGN+6+yq40TzXE9Cjtej6BSzyDb6kgN2iBcc79ElAM=\",\"salt\":\"irNSl0Zw69t6lK/+BMpT7A==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "realmRoles" : [ "default-roles-adempiere" ],
     "notBefore" : 0,
     "groups" : [ "/adempiere" ]
   }, {
@@ -630,6 +752,7 @@
       "config" : {
         "user.session.note" : "clientAddress",
         "introspection.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "clientAddress",
@@ -644,6 +767,7 @@
       "config" : {
         "user.session.note" : "clientHost",
         "introspection.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "clientHost",
@@ -658,6 +782,7 @@
       "config" : {
         "user.session.note" : "client_id",
         "introspection.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "client_id",
@@ -693,9 +818,10 @@
     "protocol" : "openid-connect",
     "attributes" : {
       "oidc.ciba.grant.enabled" : "false",
-      "oauth2.device.authorization.grant.enabled" : "false",
       "client.secret.creation.time" : "1707492440",
       "backchannel.logout.session.required" : "true",
+      "post.logout.redirect.uris" : "+",
+      "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false"
     },
     "authenticationFlowBindingOverrides" : { },
@@ -1432,6 +1558,10 @@
     "strictTransportSecurity" : "max-age=31536000; includeSubDomains"
   },
   "smtpServer" : { },
+  "loginTheme" : "university-theme",
+  "accountTheme" : "",
+  "adminTheme" : "",
+  "emailTheme" : "",
   "eventsEnabled" : false,
   "eventsListeners" : [ "jboss-logging" ],
   "enabledEventTypes" : [ ],
@@ -1456,7 +1586,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "saml-user-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper", "oidc-usermodel-property-mapper", "saml-user-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-address-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "oidc-usermodel-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-address-mapper", "saml-role-list-mapper", "saml-user-property-mapper", "saml-user-attribute-mapper", "oidc-usermodel-property-mapper" ]
       }
     }, {
       "id" : "76c870d0-5199-4864-b9ac-371575a763cc",
@@ -1488,7 +1618,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-full-name-mapper", "saml-user-property-mapper", "oidc-usermodel-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-address-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper", "oidc-address-mapper", "saml-role-list-mapper", "oidc-usermodel-attribute-mapper" ]
       }
     }, {
       "id" : "b11bdb69-9d30-444d-8f4e-58fba786ccb7",
@@ -1554,8 +1684,9 @@
       }
     } ]
   },
-  "internationalizationEnabled" : false,
-  "supportedLocales" : [ ],
+  "internationalizationEnabled" : true,
+  "supportedLocales" : [ "es" ],
+  "defaultLocale" : "es",
   "authenticationFlows" : [ {
     "id" : "ea4accea-4b88-4c9b-99ae-c407398afdbe",
     "alias" : "Account verification options",
@@ -1597,6 +1728,58 @@
       "authenticatorFlow" : false,
       "requirement" : "REQUIRED",
       "priority" : 20,
+      "autheticatorFlow" : false,
+      "userSetupAllowed" : false
+    } ]
+  }, {
+    "id" : "115593e1-a8f4-4d19-bb05-d8ae3fe69bf4",
+    "alias" : "Copy of registration",
+    "description" : "registration flow",
+    "providerId" : "basic-flow",
+    "topLevel" : true,
+    "builtIn" : false,
+    "authenticationExecutions" : [ {
+      "authenticator" : "registration-page-form",
+      "authenticatorFlow" : true,
+      "requirement" : "REQUIRED",
+      "priority" : 10,
+      "autheticatorFlow" : true,
+      "flowAlias" : "Copy of registration registration form",
+      "userSetupAllowed" : false
+    } ]
+  }, {
+    "id" : "e99ba034-3bbf-41a1-a8e2-0fdb204e087d",
+    "alias" : "Copy of registration registration form",
+    "description" : "registration form",
+    "providerId" : "form-flow",
+    "topLevel" : false,
+    "builtIn" : false,
+    "authenticationExecutions" : [ {
+      "authenticator" : "registration-user-creation",
+      "authenticatorFlow" : false,
+      "requirement" : "REQUIRED",
+      "priority" : 20,
+      "autheticatorFlow" : false,
+      "userSetupAllowed" : false
+    }, {
+      "authenticator" : "registration-password-action",
+      "authenticatorFlow" : false,
+      "requirement" : "REQUIRED",
+      "priority" : 50,
+      "autheticatorFlow" : false,
+      "userSetupAllowed" : false
+    }, {
+      "authenticator" : "registration-recaptcha-action",
+      "authenticatorFlow" : false,
+      "requirement" : "DISABLED",
+      "priority" : 60,
+      "autheticatorFlow" : false,
+      "userSetupAllowed" : false
+    }, {
+      "authenticator" : "registration-terms-and-conditions",
+      "authenticatorFlow" : false,
+      "requirement" : "REQUIRED",
+      "priority" : 61,
       "autheticatorFlow" : false,
       "userSetupAllowed" : false
     } ]
@@ -2016,7 +2199,7 @@
     "alias" : "TERMS_AND_CONDITIONS",
     "name" : "Terms and Conditions",
     "providerId" : "TERMS_AND_CONDITIONS",
-    "enabled" : false,
+    "enabled" : true,
     "defaultAction" : false,
     "priority" : 20,
     "config" : { }
@@ -2078,7 +2261,7 @@
     "config" : { }
   } ],
   "browserFlow" : "browser",
-  "registrationFlow" : "registration",
+  "registrationFlow" : "Copy of registration",
   "directGrantFlow" : "direct grant",
   "resetCredentialsFlow" : "reset credentials",
   "clientAuthenticationFlow" : "clients",
