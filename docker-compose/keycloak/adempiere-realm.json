@@ -396,7 +396,7 @@
     "containerId" : "026351f5-1537-4e28-8c35-b247a40ad394"
   },
   "requiredCredentials" : [ "password" ],
-  "passwordPolicy" : "forceExpiredPasswordChange(180) and specialChars(2) and length(8) and upperCase(1) and lowerCase(1) and notUsername(undefined) and notEmail(undefined) and passwordHistory(3)",
+  "passwordPolicy" : "forceExpiredPasswordChange(180) and specialChars(2) and length(8) and upperCase(1) and lowerCase(1) and passwordHistory(3)",
   "otpPolicyType" : "totp",
   "otpPolicyAlgorithm" : "HmacSHA1",
   "otpPolicyInitialCounter" : 0,
@@ -549,23 +549,23 @@
   }, {
     "id" : "58d754df-8d6c-4496-b70a-8a248055c2f6",
     "createdTimestamp" : 1714608710415,
-    "username" : "jhernandez@adempiere.io",
+    "username" : "jesus.ale.hernandez.11@gmail.com",
     "enabled" : true,
     "totp" : false,
     "emailVerified" : true,
     "firstName" : "Jesús",
     "lastName" : "Hernández",
-    "email" : "jhernandez@adempiere.io",
+    "email" : "jesus.ale.hernandez.11@gmail.com",
     "credentials" : [ {
       "id" : "ee9aa445-7c69-4a47-b74f-ca8e63dbed1b",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1714608717014,
-      "secretData" : "{\"value\":\"1p0wd2DjMGkwyuobUBRtlyBMMojocEHwZ381fuydrMQ=\",\"salt\":\"LKdj56fIFnkAeojXypio8g==\",\"additionalParameters\":{}}",
+      "createdDate" : 1716063520313,
+      "secretData" : "{\"value\":\"qyi+l6qgcKqy5FzhRRao6DMLCDIHjT8KgaHac7aPPBg=\",\"salt\":\"+D0S3B1lBWd4QHHk2755qw==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "CONFIGURE_TOTP", "UPDATE_PASSWORD" ],
     "realmRoles" : [ "default-roles-adempiere" ],
     "notBefore" : 0,
     "groups" : [ "/adempiere" ]
@@ -804,8 +804,8 @@
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
     "secret" : "lvrT2aJq7qIiRlxuxd9kctCVajpO53G5",
-    "redirectUris" : [ "*" ],
-    "webOrigins" : [ ],
+    "redirectUris" : [ "http://api.adempiere.io/vue" ],
+    "webOrigins" : [ "api.adempiere.io/vue" ],
     "notBefore" : 0,
     "bearerOnly" : false,
     "consentRequired" : false,
@@ -822,6 +822,7 @@
       "backchannel.logout.session.required" : "true",
       "post.logout.redirect.uris" : "+",
       "oauth2.device.authorization.grant.enabled" : "false",
+      "display.on.consent.screen" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false"
     },
     "authenticationFlowBindingOverrides" : { },
@@ -1586,7 +1587,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "oidc-usermodel-property-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "saml-role-list-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper", "oidc-sha256-pairwise-sub-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "saml-user-attribute-mapper", "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper" ]
       }
     }, {
       "id" : "76c870d0-5199-4864-b9ac-371575a763cc",
@@ -1618,7 +1619,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-full-name-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-user-attribute-mapper", "oidc-usermodel-property-mapper", "saml-user-property-mapper", "oidc-address-mapper", "oidc-usermodel-attribute-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-usermodel-property-mapper", "oidc-full-name-mapper", "saml-user-property-mapper", "oidc-address-mapper" ]
       }
     }, {
       "id" : "b11bdb69-9d30-444d-8f4e-58fba786ccb7",
