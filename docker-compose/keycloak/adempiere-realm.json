@@ -396,7 +396,7 @@
     "containerId" : "026351f5-1537-4e28-8c35-b247a40ad394"
   },
   "requiredCredentials" : [ "password" ],
-  "passwordPolicy" : "forceExpiredPasswordChange(180) and specialChars(2) and length(8) and upperCase(1) and lowerCase(1) and passwordHistory(3)",
+  "passwordPolicy" : "forceExpiredPasswordChange(180) and specialChars(2) and length(8) and upperCase(1) and lowerCase(1) and notUsername(undefined) and notEmail(undefined) and passwordHistory(3)",
   "otpPolicyType" : "totp",
   "otpPolicyAlgorithm" : "HmacSHA1",
   "otpPolicyInitialCounter" : 0,
@@ -439,15 +439,15 @@
     "lastName" : "Pérez",
     "email" : "dperez@adempiere.io",
     "credentials" : [ {
-      "id" : "f9b73a1a-1332-4c75-a55f-f8514ac66190",
+      "id" : "75f64896-4f2d-45b5-b4da-0130a78cdc3e",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1714611751393,
-      "secretData" : "{\"value\":\"Aql5yTUD6vUSl+4YOnrSDw9PM9gR0RWapy9VyeN72ys=\",\"salt\":\"dx4FbkoM6kEgDJZcn2DgLw==\",\"additionalParameters\":{}}",
+      "createdDate" : 1716162730553,
+      "secretData" : "{\"value\":\"9PXM4vWlzSZwOxxz8/ZawkOE/5jzWfUN8w6xkV/ejJM=\",\"salt\":\"U8AymRfNQ+KD1t1KiYsYyw==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "CONFIGURE_TOTP", "UPDATE_PASSWORD" ],
     "realmRoles" : [ "default-roles-adempiere" ],
     "notBefore" : 0,
     "groups" : [ "/adempiere" ]
@@ -508,15 +508,15 @@
       "terms_and_conditions" : [ "1714607225" ]
     },
     "credentials" : [ {
-      "id" : "3247a17d-8292-4bb2-a419-80578f3e78a9",
+      "id" : "d92ae7c5-92f0-441c-b767-61f64ec22808",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1714611762216,
-      "secretData" : "{\"value\":\"feWIJq9PBqM8PvFW7TpMh7MTmKy1eQTbhOeYESYIXsQ=\",\"salt\":\"pCpUKyw+88BmHU7P+YFd3Q==\",\"additionalParameters\":{}}",
+      "createdDate" : 1716162745406,
+      "secretData" : "{\"value\":\"h/QqyvS2a4xfk3JPgTL12iwsBuAxvT73AK3xNzcACUE=\",\"salt\":\"MyaV1SXZFsbWmjHXg/ebtw==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ "TERMS_AND_CONDITIONS", "UPDATE_PASSWORD" ],
+    "requiredActions" : [ "TERMS_AND_CONDITIONS", "CONFIGURE_TOTP", "UPDATE_PASSWORD" ],
     "realmRoles" : [ "default-roles-adempiere" ],
     "notBefore" : 0,
     "groups" : [ "/adempiere" ]
@@ -549,19 +549,19 @@
   }, {
     "id" : "58d754df-8d6c-4496-b70a-8a248055c2f6",
     "createdTimestamp" : 1714608710415,
-    "username" : "jesus.ale.hernandez.11@gmail.com",
+    "username" : "jhernandez@adempiere.io",
     "enabled" : true,
     "totp" : false,
     "emailVerified" : true,
     "firstName" : "Jesús",
     "lastName" : "Hernández",
-    "email" : "jesus.ale.hernandez.11@gmail.com",
+    "email" : "jhernandez@adempiere.io",
     "credentials" : [ {
-      "id" : "ee9aa445-7c69-4a47-b74f-ca8e63dbed1b",
+      "id" : "e1641406-843d-4556-9bf7-2ee03fc8c0c4",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1716063520313,
-      "secretData" : "{\"value\":\"qyi+l6qgcKqy5FzhRRao6DMLCDIHjT8KgaHac7aPPBg=\",\"salt\":\"+D0S3B1lBWd4QHHk2755qw==\",\"additionalParameters\":{}}",
+      "createdDate" : 1716162689963,
+      "secretData" : "{\"value\":\"En9gOneUvVyTi0gm8S5yqTG4g59UCDvIwu9tWM3hYYw=\",\"salt\":\"AObYmzR/328HSFe79hix8g==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
@@ -580,11 +580,11 @@
     "lastName" : "Zúñiga",
     "email" : "jzuñiga@adempiere.io",
     "credentials" : [ {
-      "id" : "22dd38ba-59c6-427d-ad7f-7e3e9f84d9f7",
+      "id" : "04e7ccfa-aa2d-4acd-917a-e4ea62a58695",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1714608618617,
-      "secretData" : "{\"value\":\"NvGN+6+yq40TzXE9Cjtej6BSzyDb6kgN2iBcc79ElAM=\",\"salt\":\"irNSl0Zw69t6lK/+BMpT7A==\",\"additionalParameters\":{}}",
+      "createdDate" : 1716162784972,
+      "secretData" : "{\"value\":\"0nkDVVwxlH/nVsWg8up4Rn2BlYaT/gUJANPZVfiSaXQ=\",\"salt\":\"IJDeGByekP9hXoe88g06IQ==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
@@ -804,8 +804,8 @@
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
     "secret" : "lvrT2aJq7qIiRlxuxd9kctCVajpO53G5",
-    "redirectUris" : [ "http://api.adempiere.io/vue" ],
-    "webOrigins" : [ "api.adempiere.io/vue" ],
+    "redirectUris" : [ "*" ],
+    "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,
     "consentRequired" : false,
@@ -822,7 +822,6 @@
       "backchannel.logout.session.required" : "true",
       "post.logout.redirect.uris" : "+",
       "oauth2.device.authorization.grant.enabled" : "false",
-      "display.on.consent.screen" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false"
     },
     "authenticationFlowBindingOverrides" : { },
@@ -1587,7 +1586,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "saml-user-attribute-mapper", "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "saml-user-attribute-mapper", "oidc-usermodel-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "saml-role-list-mapper", "oidc-address-mapper", "oidc-full-name-mapper" ]
       }
     }, {
       "id" : "76c870d0-5199-4864-b9ac-371575a763cc",
@@ -1619,7 +1618,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-usermodel-property-mapper", "oidc-full-name-mapper", "saml-user-property-mapper", "oidc-address-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-usermodel-property-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "oidc-usermodel-attribute-mapper", "saml-user-property-mapper", "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper" ]
       }
     }, {
       "id" : "b11bdb69-9d30-444d-8f4e-58fba786ccb7",
