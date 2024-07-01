@@ -41,7 +41,7 @@
     <div id="kc-header" class="${properties.kcHeaderClass!}">
 
         <div class="logo">
-            <img alt="Keycloak" src="${url.resourcesPath}/img/keycloak.svg" width="120"/>
+            <img alt="Keycloak" src="${url.resourcesPath}/img/logo.png" width="300"/>
         </div>
 
         <div id="kc-header-wrapper"
@@ -152,6 +152,28 @@
 
     </div>
   </div>
+  <script>
+    let failedAttempts = localStorage.getItem('failedAttempts') || 0;
+
+    const serverFieldErrors = {
+        "password": "${(message.summary)!""}"
+    };
+
+    const invalidUserMessage = "${msg('invalidUserMessage')}";
+    const accountTemporarilyDisabledMessage = "${msg('accountTemporarilyDisabledMessage')}";
+
+    if (serverFieldErrors.password === invalidUserMessage) {
+        failedAttempts++;
+        localStorage.setItem('failedAttempts', failedAttempts);
+
+        if (failedAttempts >= 3) {
+            document.querySelectorAll("input").forEach((element) => element.setAttribute("disabled", "disabled"));
+            alert(accountTemporarilyDisabledMessage);
+        }
+    } else {
+        localStorage.setItem('failedAttempts', 0);
+    }
+</script>
 </body>
 </html>
 </#macro>

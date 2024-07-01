@@ -3,9 +3,9 @@
 :root {
   font-size: 14px;
   --pf-global--BackgroundColor--light-100: #fff;
-  --pf-c-button--m-primary--BackgroundColor: #36383a;
-  --pf-global--primary-color--100: #36383a;
-  --pf-global--primary-color--200:#f2a92e
+  --pf-c-button--m-primary--BackgroundColor: #293055;
+  --pf-global--primary-color--100: #293055;
+  --pf-global--primary-color--200:#293055
 }
 
 .login-pf {
@@ -15,7 +15,7 @@
 }
 
 .login-pf body {
-  background: #e4e4e4;
+  background: #293055;
   font-family: Roboto;
   height: 100%;
   margin: 0;
@@ -41,7 +41,7 @@
   justify-content: space-around;
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
-  background-color: #36383a;
+  background-color: #fff;
 }
 
 .card-pf {
@@ -78,8 +78,8 @@ select {
 
 input[type="submit"] {
   width: 100%;
-  background-color: #4caf50;
-  color: white;
+  background-color: #549fbd;
+  color: rgb(60, 60, 60);
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
@@ -88,7 +88,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-  background-color: #45a049;
+  background-color: #549fbd;
 }
 
 #kc-form-options .checkbox {
@@ -109,8 +109,8 @@ input[type="submit"]:hover {
 }
 
 .pf-m-primary:hover {
-  background-color: #389bff !important;
-  color: #36383a !important;
+  background-color: #549fbd !important;
+  color: #293055 !important;
 }
 
 .login-subtitle {
