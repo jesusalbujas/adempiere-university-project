@@ -1,12 +1,12 @@
 services:
   postgresql.service:
-    container_name: ${POSTGRES_NAME}
+    container_name: ${POSTGRES_HOST}
     image: ${POSTGRES_IMAGE}
     restart: ${GENERIC_RESTART}
     ports:
       - ${POSTGRES_PORT}:5432
     volumes:
-      - ${POSTGRES_VOLUME}:/var/lib/postgresql/data
+      - postgres_volume:/var/lib/postgresql/data
       - ./postgresql/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
       - ./postgresql/seed.backup:/tmp/seed.backup
       - ./postgresql/after_run:/tmp/after_run
@@ -184,3 +184,13 @@ services:
 networks:
   shared_network:
     name: ${DEFAULT_NETWORK}
+
+volumes:
+  # volume_nginx:
+  #   name: ${NGINX_UI_GATEWAY_VOLUME}
+  # volume_envoy:
+  #   name: ${ENVOY_VOLUME}
+  postgres_volume:
+    name: ${POSTGRES_VOLUME}
+  # volume_opensearch:
+  #   name: ${OPENSEARCH_VOLUME}
