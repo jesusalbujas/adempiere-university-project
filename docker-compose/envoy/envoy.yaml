@@ -13,10 +13,6 @@ static_resources:
         typed_config:
           "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
           stat_prefix: grpc_json
-          access_log:
-          - name: envoy.access_loggers.stdout
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
           codec_type: AUTO
           stream_idle_timeout: 900s
           # common_http_protocol_options:
@@ -56,24 +52,23 @@ static_resources:
                 - express_movement.ExpressMovement
                 - express_receipt.ExpressReceipt
                 - express_shipment.ExpressShipment
-                - field.FieldManagementService
                 - field.business_partner.BusinessPartnerInfoService
-                - field.invoice.InvoiceInfoService
-                - field.order.OrderInfoService
-                - field.payment.PaymentInfoService
                 - field.product.ProductInfoService
                 - file_management.FileManagement
                 - general_ledger.GeneralLedger
                 - import_file_loader.ImportFileLoader
                 - in_out.InOut
+                - invoice.Invoice
                 - issue_management.IssueManagement
                 - location_address.LocationAddress
                 - logs.Logs
                 - match_po_receipt_invoice.MatchPORReceiptInvoice
                 - material_management.MaterialManagement
                 - notice_management.NoticeManagement
+                - order.Order
                 - payment_allocation.PaymentAllocation
                 - payment_print_export.PaymentPrintExport
+                - payment.Payment
                 - payroll_action_notice.PayrollActionNotice
                 - data.Store
                 - record_management.RecordManagement
@@ -112,10 +107,6 @@ static_resources:
         typed_config:
           "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
           stat_prefix: grpc_json
-          access_log:
-          - name: envoy.access_loggers.stdout
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
           codec_type: AUTO
           stream_idle_timeout: 900s
           # common_http_protocol_options:
