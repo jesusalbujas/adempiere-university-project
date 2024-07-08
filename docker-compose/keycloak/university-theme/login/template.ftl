@@ -40,9 +40,7 @@
 <div class="${properties.kcLoginClass!}">
     <div id="kc-header" class="${properties.kcHeaderClass!}">
 
-        <div class="logo">
-            <img alt="Keycloak" src="${url.resourcesPath}/img/logo.png" width="300"/>
-        </div>
+        
 
         <div id="kc-header-wrapper"
              class="${properties.kcHeaderWrapperClass!}">${kcSanitize(msg("loginTitleHtml",(realm.displayNameHtml!'')))?no_esc}</div>
@@ -76,7 +74,10 @@
                     </div>
                 </div>
             <#else>
-                <h1 id="kc-page-title"><#nested "header"></h1>
+        <div class="logo">
+            <img alt="Keycloak" src="${url.resourcesPath}/img/logo.png" width="300"/>
+        </div>
+                <h1 class="kc-page-title" id="kc-page-title"><#nested "header"></h1>
             </#if>
         <#else>
             <#if displayRequiredFields>
