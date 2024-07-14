@@ -138,21 +138,83 @@ input[type="submit"]:hover {
   text-align: center;
 }
 
-.kcButtonDefaultClass {
-  width: 100%;
-  background-color: #0059ac;
-  color: rgb(255, 255, 255);
-  font-weight: bold;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .pf-m-error {
   color: #ff0000 !important;
 }
+
+ /* center the tittle terms and conditions */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.termstext {
+  text-align: justify;
+}
+
+ /* icon terms and conditions */
+.title-with-logo {
+  display: flex;
+  align-items: center;
+}
+
+.title-with-logo svg {
+  margin-right: 10px; /* Space between the logo and the title */
+}
+
+/* Style terms and conditions */
+.button {
+  min-width: 120px;
+  position: relative;
+  cursor: pointer;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: radial-gradient(
+    ellipse at bottom,
+    rgb(7, 79, 187) 0%, /* Royal blue */
+    rgb(30, 95, 235) 45% /* Midnight blue */
+  );
+  color: rgba(255, 255, 255, 0.66); /* White with transparency */
+  transition: all 1s cubic-bezier(0.15, 0.83, 0.66, 1);
+  margin: 0 10px; /* Add margin to separate buttons */
+}
+
+.button::before {
+  content: "";
+  width: 70%;
+  height: 1px;
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%, /* Transparent */
+    rgba(255, 255, 255, 1) 50%, /* White */
+    rgba(255, 255, 255, 0) 100% /* Transparent */
+  );
+  opacity: 0.2;
+  transition: all 1s cubic-bezier(0.15, 0.83, 0.66, 1);
+}
+
+.button:hover {
+  color: rgba(255, 255, 255, 1); /* Full white */
+  transform: scale(1.1) translateY(-3px);
+}
+
+.button:hover::before {
+  opacity: 1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  margin-top: 20px; /* Add some margin on top of buttons */
+}
+
+/* Fin */
 
 @media (max-width: 750px) {
   .login-pf-page-header,
