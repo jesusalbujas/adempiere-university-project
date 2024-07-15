@@ -154,26 +154,62 @@
     </div>
   </div>
   <script>
-    let failedAttempts = localStorage.getItem('failedAttempts') || 0;
+let failedAttempts = parseInt(localStorage.getItem('failedAttempts') || '0', 10);
+const isLockedOut = localStorage.getItem('isLockedOut') === 'true';
 
-    const serverFieldErrors = {
-        "password": "${(message.summary)!""}"
-    };
+const serverFieldErrors = {
+    "password": "${(message.summary)!""}"
+};
 
-    const invalidUserMessage = "${msg('invalidUserMessage')}";
-    const accountTemporarilyDisabledMessage = "${msg('accountTemporarilyDisabledMessage')}";
+const invalidUserMessage = "${msg('invalidUserMessage')}";
+const accountTemporarilyDisabledMessage = "${msg('accountTemporarilyDisabledMessage')}";
 
-    if (serverFieldErrors.password === invalidUserMessage) {
-        failedAttempts++;
-        localStorage.setItem('failedAttempts', failedAttempts);
-
-        if (failedAttempts >= 3) {
-            document.querySelectorAll("input").forEach((element) => element.setAttribute("disabled", "disabled"));
-            alert(accountTemporarilyDisabledMessage);
-        }
-    } else {
-        localStorage.setItem('failedAttempts', 0);
+function checkLockout() {
+    if (isLockedOut) {
+        disableInputs();
     }
+}
+
+function disableInputs() {
+    document.querySelectorAll("input").forEach((element) => element.setAttribute("disabled", "disabled"));
+    displayLockoutMessage();
+}
+
+function enableInputs() {
+    document.querySelectorAll("input").forEach((element) => element.removeAttribute("disabled"));
+    localStorage.setItem('failedAttempts', '0');
+    localStorage.setItem('isLockedOut', 'false');
+    hideLockoutMessage();
+}
+
+function displayLockoutMessage() {
+    const lockoutMessage = document.createElement('div');
+    lockoutMessage.className = 'lockout-message';
+    lockoutMessage.textContent = accountTemporarilyDisabledMessage;
+    document.body.appendChild(lockoutMessage);
+}
+
+function hideLockoutMessage() {
+    const lockoutMessage = document.querySelector('.lockout-message');
+    if (lockoutMessage) {
+        lockoutMessage.remove();
+    }
+}
+
+if (serverFieldErrors.password === invalidUserMessage) {
+    failedAttempts++;
+    localStorage.setItem('failedAttempts', failedAttempts);
+
+    if (failedAttempts >= 3) {
+        localStorage.setItem('isLockedOut', 'true');
+        disableInputs();
+    }
+} else {
+    enableInputs();
+}
+
+// Check lockout status on page load
+checkLockout();
 </script>
 </body>
 </html>
