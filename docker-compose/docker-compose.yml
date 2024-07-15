@@ -186,11 +186,5 @@ networks:
     name: ${DEFAULT_NETWORK}
 
 volumes:
-  # volume_nginx:
-  #   name: ${NGINX_UI_GATEWAY_VOLUME}
-  # volume_envoy:
-  #   name: ${ENVOY_VOLUME}
   postgres_volume:
     name: ${POSTGRES_VOLUME}
-  # volume_opensearch:
-  #   name: ${OPENSEARCH_VOLUME}
