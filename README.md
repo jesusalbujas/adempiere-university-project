@@ -1,4 +1,4 @@
-# Proyecto Universitario usando ADempiere
+# Proyecto Universitario usando ADempiere :technologist:
 
 <p align="center">
   <a href="https://github.com/JesusAlbujas/adempiere-base/blob/main/LICENSE">
