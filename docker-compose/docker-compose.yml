@@ -111,10 +111,20 @@ services:
       - ${GATEWAY_PORT}:80
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/upstreams/:/etc/nginx/api_upstreams_conf.d
-      - ./nginx/api/:/etc/nginx/api_conf.d
       - ./nginx/gateway/api_gateway.conf:/etc/nginx/api_gateway.conf
       - ./nginx/api_json_errors.conf:/etc/nginx/api_json_errors.conf
+      # backend
+      - ./nginx/upstreams/adempiere_backend.conf:/etc/nginx/api_upstreams_conf.d/adempiere_backend.conf
+      - ./nginx/api/backend/:/etc/nginx/api_conf.d/backend/
+      # vue
+      - ./nginx/upstreams/adempiere_frontend.conf:/etc/nginx/api_upstreams_conf.d/adempiere_frontend.conf
+      - ./nginx/api/main/vue.conf:/etc/nginx/api_conf.d/main/vue.conf
+      # # zk
+      - ./nginx/upstreams/adempiere_zk.conf:/etc/nginx/api_upstreams_conf.d/adempiere_zk.conf
+      - ./nginx/api/main/zk.conf:/etc/nginx/api_conf.d/main/zk.conf
+      # landing page
+      - ./nginx/upstreams/landing_page.conf:/etc/nginx/api_upstreams_conf.d/landing_page.conf
+      - ./nginx/api/main/main.conf:/etc/nginx/api_conf.d/main/main.conf
     networks:
       - shared_network
 
