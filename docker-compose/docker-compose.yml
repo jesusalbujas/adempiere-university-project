@@ -49,6 +49,9 @@ services:
       ADEMPIERE_DB_USER: ${ADEMPIERE_ZK_DB_USER}
       ADEMPIERE_DB_PASSWORD: ${ADEMPIERE_ZK_DB_PASSWORD}
       ADEMPIERE_ZK_DB_PORT: ${ADEMPIERE_ZK_DB_PORT}
+    volumes:
+      - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
+      - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
     networks:
       - shared_network
 
@@ -70,6 +73,9 @@ services:
       DB_USER: ${GRPC_SERVER_DB_USER}
       DB_PASSWORD: ${GRPC_SERVER_DB_PASSWORD}
       JWT_SECRET_KEY: ${GRPC_SERVER_JWT_SECRET_KEY}
+    volumes:
+      - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
+      - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
     networks:
       - shared_network
 
@@ -86,6 +92,9 @@ services:
       SERVER_PORT: ${GRPC_PROXY_BACKEND_PORT}
       BACKEND_HOST: ${GRPC_PROXY_BACKEND_HOST}
       BACKEND_PORT: ${GRPC_PROXY_BACKEND_SERVER_PORT}
+    volumes:
+      - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
+      - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
     networks:
     - shared_network
 
@@ -96,6 +105,9 @@ services:
     environment:
       API_URL: ${VUE_UI_API_URL}
       PUBLIC_PATH: ${VUE_UI_PUBLIC_PATH}
+    volumes:
+      - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
+      - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
     networks:
       - shared_network
 
