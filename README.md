@@ -8,6 +8,19 @@
 
 ![image](https://github.com/JesusAlbujas/adempiere-base/assets/134967453/a7083320-31d4-4a0b-b4b9-dc50e6dd9b12)
 
+*Versión de Backend y Proxy*:
+
+![Backend gRPC Release](https://img.shields.io/github/v/release/jesusalbujas/adempiere-grpc-server)
+
+*Versión de FrontEnd*:
+
+![Frontend Release](https://img.shields.io/github/v/release/jesusalbujas/frontend-university-project)
+
+*Versión de HomePage*:
+
+![Homepage Release](https://img.shields.io/github/v/release/jesusalbujas/project-landing-page)
+---
+
 Este es un proyecto de implementación del sistema ADempiere para un Control de Activos Fijos.
 
 > [!NOTE]
