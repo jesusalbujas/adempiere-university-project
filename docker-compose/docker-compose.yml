@@ -8,7 +8,8 @@ services:
     volumes:
       - postgres_volume:/var/lib/postgresql/data
       - ./postgresql/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
-      - ./postgresql/seed.backup:/tmp/seed.backup
+      - ./postgresql/seed.backup:/tmp/seed.backup # System DB
+      - ./postgresql/keycloak.backup:/tmp/keycloak.backup # Keycloak DB
       - ./postgresql/after_run:/tmp/after_run
     healthcheck:
       test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/127.0.0.1/5432; exit $?;'"
@@ -187,12 +188,12 @@ services:
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      DB_VENDOR: ${KEYCLOAK_DB_VENDOR}
-      DB_ADDR: ${KEYCLOAK_DB_HOST}
+      KC_DB: ${KEYCLOAK_DB_VENDOR}
       DB_DATABASE: ${KEYCLOAK_DB_DATABASE}
       DB_SCHEMA: ${KEYCLOAK_DB_SCHEMA}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_SERVER: ${SERVER_NAME}
+      KC_DB_USERNAME: ${ADEMPIERE_DB_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB_URL: ${KEYCLOAK_DB_HOST}
     command: "start-dev --import-realm"
     ports:
       - ${KEYCLOAK_PORT}:8080

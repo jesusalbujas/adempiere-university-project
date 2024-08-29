@@ -5,7 +5,9 @@ then
     createuser -U postgres adempiere -dlrs
     psql -U postgres -tAc "alter user adempiere password 'adempiere';"
     createdb -U adempiere adempiere
+    createdb -U adempiere keycloak
     pg_restore -U adempiere -d adempiere < /tmp/seed.backup -v
+    pg_restore -U adempiere -d keycloak < /tmp/keycloak.backup -v
 fi
 
 AFTER_RUN_DIR="/tmp/after_run"
