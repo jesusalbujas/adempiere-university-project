@@ -97,3 +97,9 @@ Conéctese a la base de datos a través del puerto `5436` con un gestor de base 
 - Ideal para situaciones de prueba debido a su facilidad de configuración y ejecución.
 - No se requiere un profundo conocimiento de la instalación de ADempiere, la instalación del servidor de aplicaciones, Docker, imágenes o Postgres.
 - Se pueden agregar nuevos servicios fácilmente.
+
+### Desactivar SSL al Keycloak
+
+```sh
+/opt/keycloak/bin/kcadm.sh config credentials --server "http://server_name:3333" --realm master --user admin --password admin && /opt/keycloak/bin/kcadm.sh update realms/master -s sslRequired=NONE
+```
