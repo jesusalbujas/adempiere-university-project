@@ -10,7 +10,7 @@ try {
     if (currentName != null) {
         // Expresión regular que busca si el valor contiene números
         if (currentName.matches(".*\\d.*")) {
-            return "@Error@ El campo Nombre no puede contener números.";
+            return "@Error@ No puede contener números.";
         }
     }
     
