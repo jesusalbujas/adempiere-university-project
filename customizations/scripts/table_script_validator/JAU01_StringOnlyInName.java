@@ -1,24 +1,22 @@
-// beanshell:JAU01_StringOnlyInName
+// groovy: JAU01_NoNumbersInName
+import org.compiere.model.PO;
+PO entity = A_PO;
 
-// Obtiene el valor actual del campo 'name'
-String nameValue = A_Tab.getValue("Name");
+try {
+    // Obtiene el valor actual del campo 'Name'
+    String currentName = entity.get_ValueAsString("Name");
 
-// Verifica si el valor no es nulo y es una cadena de texto
-if (nameValue == null) {
-    return "@Error@ El campo está vacío.";
-}
-
-// Convertir el valor a String
-String currentName = nameValue.toString();
-
-// Verifica si el valor contiene números
-if (currentName.matches(".*\\d.*")) {
-    // Limpia el valor del campo para evitar el guardado
-    A_Tab.setValue("Name", "");
+    // Verifica si el valor no es nulo
+    if (currentName != null) {
+        // Expresión regular que busca si el valor contiene números
+        if (currentName.matches(".*\\d.*")) {
+            return "@Error@ El campo Nombre no puede contener números.";
+        }
+    }
     
-    // Muestra un error y evita guardar (solo en zk)
-    return "@Error@ El campo no puede contener números.";
-} 
+    // Si todo está bien, no retorna error
+    result = "";
 
-// no mostrar nada si todo está bien
-result = "";
+} catch (Exception e) {
+    return "@Error@ " + e.getLocalizedMessage();
+}
