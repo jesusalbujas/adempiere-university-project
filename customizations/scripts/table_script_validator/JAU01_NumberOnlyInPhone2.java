@@ -4,7 +4,7 @@ PO entity = A_PO;
 
 try {
     // Obtiene el valor actual del campo
-    String currentName = entity.get_ValueAsString("Phone");
+    String currentName = entity.get_ValueAsString("Phone2");
 
     // Verifica si el valor no es nulo
     if (currentName != null) {
