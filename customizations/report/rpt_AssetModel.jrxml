@@ -27,7 +27,7 @@ FROM JAU01_AssetModel am
 INNER JOIN AD_Client ac ON(am.AD_Client_ID=ac.AD_Client_ID)
 INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
 INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
-]]>
+WHERE am.AD_Org_ID != 0 AND am.AD_Org_ID = 50006;]]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
@@ -57,7 +57,7 @@ INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
 	<title>
 		<band height="70" splitType="Stretch">
 			<staticText>
-				<reportElement style="Title" x="211" y="0" width="238" height="67" uuid="1dcadd54-7d50-4470-85ed-189e4d910b25"/>
+				<reportElement style="Title" x="211" y="0" width="228" height="67" uuid="1dcadd54-7d50-4470-85ed-189e4d910b25"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" isBold="true" isItalic="true"/>
 				</textElement>
@@ -75,18 +75,18 @@ INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
 				<imageExpression><![CDATA[$F{logo_erp}]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="466" y="25" width="160" height="20" forecolor="#000000" uuid="95484ca0-40b4-4752-95d8-1afbc33c820b"/>
-				<textElement textAlignment="Center">
-					<font fontName="SansSerif" size="10" isBold="false"/>
+				<reportElement style="Column header" x="460" y="25" width="166" height="20" forecolor="#000000" uuid="0c8c7655-b704-4a97-a4a0-e4d1c1129870"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Fecha de Emisión: " + new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Fecha de Emisión: " + new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="30">
 			<staticText>
-				<reportElement mode="Opaque" x="231" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="117" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -97,10 +97,10 @@ INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nombre:]]></text>
+				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="340" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
+				<reportElement mode="Opaque" x="226" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -114,7 +114,7 @@ INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
 				<text><![CDATA[Marca]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="115" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
+				<reportElement mode="Opaque" x="1" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -128,7 +128,7 @@ INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="456" y="-1" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="6b09197c-555f-469f-9703-59545ee75c8b">
+				<reportElement mode="Opaque" x="342" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="6b09197c-555f-469f-9703-59545ee75c8b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -146,28 +146,28 @@ INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
 	<detail>
 		<band height="30">
 			<textField isBlankWhenNull="true">
-				<reportElement x="234" y="0" width="100" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="120" y="0" width="100" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="342" y="0" width="108" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
+				<reportElement x="228" y="0" width="108" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{markname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="117" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
+				<reportElement x="3" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="458" y="-1" width="108" height="30" uuid="2333a70c-5405-4e9a-823c-ba2fb450410e"/>
+				<reportElement x="344" y="0" width="108" height="29" uuid="2333a70c-5405-4e9a-823c-ba2fb450410e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>

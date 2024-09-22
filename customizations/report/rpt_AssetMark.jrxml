@@ -24,7 +24,8 @@
 	am.IsActive
 FROM JAU01_AssetMark am
 INNER JOIN AD_Client ac ON(am.AD_Client_ID=ac.AD_Client_ID)
-INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)]]>
+INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
+WHERE am.AD_Org_ID != 0 AND am.AD_Org_ID = 50006;]]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
@@ -67,18 +68,18 @@ INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)]]>
 				<imageExpression><![CDATA[$F{logo_erp}]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="466" y="25" width="160" height="20" forecolor="#000000" uuid="95484ca0-40b4-4752-95d8-1afbc33c820b"/>
-				<textElement textAlignment="Center">
-					<font fontName="SansSerif" size="10" isBold="false"/>
+				<reportElement style="Column header" x="460" y="25" width="166" height="20" forecolor="#000000" uuid="95484ca0-40b4-4752-95d8-1afbc33c820b"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Fecha de Emisión: " + new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Fecha de Emisión: " + new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="30">
 			<staticText>
-				<reportElement mode="Opaque" x="286" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="116" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -92,7 +93,7 @@ INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)]]>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="395" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
+				<reportElement mode="Opaque" x="225" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -106,7 +107,7 @@ INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)]]>
 				<text><![CDATA[Activo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="170" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
+				<reportElement mode="Opaque" x="0" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -124,14 +125,14 @@ INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)]]>
 	<detail>
 		<band height="31">
 			<textField isBlankWhenNull="true">
-				<reportElement x="289" y="0" width="100" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="119" y="0" width="100" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="397" y="0" width="108" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
+				<reportElement x="227" y="0" width="108" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -141,7 +142,7 @@ INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)]]>
 	)]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="172" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
+				<reportElement x="2" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>

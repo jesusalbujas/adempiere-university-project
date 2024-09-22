@@ -18,16 +18,19 @@
 	<style name="Detail" fontName="Arial" fontSize="12"/>
 	<queryString>
 		<![CDATA[SELECT 
-	inf.Logo_ERP AS Logo_ERP,
-	bp.Value,
-	bp.Name,
-	bp.Name2,
-	bp.TaxID,
-	bp.IsActive
+    inf.Logo_ERP AS Logo_ERP,
+    bp.Value,
+    bp.Name,
+    bp.Name2,
+    bp.IsActive,
+    COALESCE(bp.JAU01_Nationality || ' - ' || bp.TaxID, bp.JAU01_Nationality) AS TaxID,
+	JAU01_JobType as JobType
 FROM C_BPartner bp
 INNER JOIN AD_Client ac ON(bp.AD_Client_ID=ac.AD_Client_ID)
 INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
-WHERE bp.IsEmployee='Y']]>
+WHERE bp.IsEmployee = 'Y' 
+  AND bp.AD_Org_ID != 0 
+  AND bp.AD_Org_ID = 50006;]]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
@@ -49,14 +52,18 @@ WHERE bp.IsEmployee='Y']]>
 		<property name="com.jaspersoft.studio.field.label" value="name2"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
 	</field>
-	<field name="taxid" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="taxid"/>
-		<property name="com.jaspersoft.studio.field.label" value="taxid"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
-	</field>
 	<field name="isactive" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="isactive"/>
 		<property name="com.jaspersoft.studio.field.label" value="isactive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
+	</field>
+	<field name="taxid" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="taxid"/>
+		<property name="com.jaspersoft.studio.field.label" value="taxid"/>
+	</field>
+	<field name="jobtype" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="jobtype"/>
+		<property name="com.jaspersoft.studio.field.label" value="jobtype"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
 	</field>
 	<title>
@@ -69,7 +76,7 @@ WHERE bp.IsEmployee='Y']]>
 				<text><![CDATA[Empleado]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="506" y="50" width="120" height="20" uuid="13fcf158-58d6-4a39-b352-6fb81db32563"/>
+				<reportElement x="506" y="48" width="120" height="20" uuid="13fcf158-58d6-4a39-b352-6fb81db32563"/>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="14"/>
 				</textElement>
@@ -80,18 +87,18 @@ WHERE bp.IsEmployee='Y']]>
 				<imageExpression><![CDATA[$F{logo_erp}]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="466" y="25" width="160" height="20" forecolor="#000000" uuid="95484ca0-40b4-4752-95d8-1afbc33c820b"/>
-				<textElement textAlignment="Center">
-					<font fontName="SansSerif" size="10" isBold="false"/>
+				<reportElement style="Column header" x="460" y="25" width="166" height="20" forecolor="#000000" uuid="d5b2df46-2b1f-439f-8e3f-d89d3fef4b62"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Fecha de Emisión: " + new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Fecha de Emisión: " + new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35">
+		<band height="31">
 			<staticText>
-				<reportElement mode="Opaque" x="157" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="114" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -105,7 +112,7 @@ WHERE bp.IsEmployee='Y']]>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="376" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="30ab307a-329d-482e-a882-9dfbe6da3438">
+				<reportElement mode="Opaque" x="330" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="30ab307a-329d-482e-a882-9dfbe6da3438">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -116,10 +123,10 @@ WHERE bp.IsEmployee='Y']]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RIF/C.I]]></text>
+				<text><![CDATA[C.I]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="492" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
+				<reportElement mode="Opaque" x="445" y="0" width="79" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -133,7 +140,7 @@ WHERE bp.IsEmployee='Y']]>
 				<text><![CDATA[Activo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="41" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
+				<reportElement mode="Opaque" x="0" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -147,7 +154,7 @@ WHERE bp.IsEmployee='Y']]>
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="267" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="3eca6dd2-2153-4970-a0f8-7f6cb2aaa342">
+				<reportElement mode="Opaque" x="222" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="3eca6dd2-2153-4970-a0f8-7f6cb2aaa342">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -160,19 +167,33 @@ WHERE bp.IsEmployee='Y']]>
 				</textElement>
 				<text><![CDATA[Apellido]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="526" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="67fb0d99-7900-4d34-9fe8-8ae7c5724b37">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cargo]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="31">
+		<band height="29">
 			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="0" width="100" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="117" y="0" width="100" height="28" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="494" y="0" width="108" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
+				<reportElement x="447" y="0" width="77" height="28" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -182,25 +203,46 @@ WHERE bp.IsEmployee='Y']]>
 	)]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="43" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
+				<reportElement x="2" y="0" width="108" height="28" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="379" y="1" width="108" height="30" uuid="06e90440-26e0-4800-bd1a-3e284e720320"/>
+				<reportElement x="333" y="1" width="108" height="28" uuid="06e90440-26e0-4800-bd1a-3e284e720320"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{taxid}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="270" y="0" width="100" height="30" uuid="d6cc7025-024f-4be4-86e4-bc8b791d3170"/>
+				<reportElement x="225" y="0" width="100" height="28" uuid="d6cc7025-024f-4be4-86e4-bc8b791d3170"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="528" y="0" width="96" height="28" uuid="4d05b3dd-bd51-451c-9f78-a6217a3076f0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{jobtype}.equals("1") ? "Desarrollo" : 
+	($F{jobtype}.equals("2") ? "Admin TI / Desarrollo de Reporte" :
+		($F{jobtype}.equals("3") ? "Soporte Master" :
+			($F{jobtype}.equals("4") ? "Soporte Junior" :
+				($F{jobtype}.equals("5") ? "Coordinador de Proyecto" :
+					($F{jobtype}.equals("6") ? "Director de Ventas y Administración" :
+						($F{jobtype}.equals("7") ? "Administrador (a)" : "--"
+						)
+					)
+				)
+			)
+		)
+	)
+)
+]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
