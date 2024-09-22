@@ -18,7 +18,7 @@ try {
         // Obtiene el valor actual del campo
         // Verifica si el valor no es null
         if (currentName != null) {
-            // Verifica si el valor contiene letras
+            // Verifica si el valor ya existe.
             int referenceId = new Query(A_Ctx, tableName, "UPPER(TRIM(Name)) = UPPER(TRIM(?)) AND " + tableName + "_ID <> ?", entity.get_TrxName()).setParameters(currentName, entity.get_ID()).setClient_ID().firstId();
             if (referenceId > 0) {
                 return "@Error@ Nombre ya existe";
