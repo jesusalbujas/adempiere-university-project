@@ -17,3 +17,7 @@ CREATE TRIGGER trg_update_value_with_A_Asset_Addition_id
 BEFORE INSERT ON A_Asset_Addition
 FOR EACH ROW
 EXECUTE FUNCTION update_value_with_A_Asset_Addition_id();
+
+
+DROP TRIGGER IF EXISTS trg_update_value_with_A_Asset_Addition_id ON A_Asset_Addition;
+DROP FUNCTION IF EXISTS update_value_with_A_Asset_Addition_id();
