@@ -28,9 +28,10 @@
 FROM C_BPartner bp
 INNER JOIN AD_Client ac ON(bp.AD_Client_ID=ac.AD_Client_ID)
 INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
-WHERE bp.IsEmployee = 'Y' 
+WHERE bp.IsEmployee = 'Y'
   AND bp.AD_Org_ID != 0 
-  AND bp.AD_Org_ID = 50006;]]>
+  AND bp.AD_Org_ID = 50006
+  AND bp.IsVendor='N']]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
@@ -241,8 +242,7 @@ WHERE bp.IsEmployee = 'Y'
 			)
 		)
 	)
-)
-]]></textFieldExpression>
+)]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
