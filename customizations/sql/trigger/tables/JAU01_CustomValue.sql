@@ -51,7 +51,7 @@ BEGIN
     IF NEW.IsVendor = 'Y' THEN
         NEW.vendor_id := nextval('vendor_id_seq');  -- Asigna el siguiente valor de la secuencia
         NEW.Value_Vendor := NEW.vendor_id::text;  -- Asigna el valor del vendor_id a Value_Vendor
-        NEW.Value := 100;  -- Asigna 100 (o el valor que desees) a Value
+        NEW.Value := nextval('another_id_seq');  -- Asigna 100 (o el valor que desees) a Value
     END IF;
 
     -- Verifica si el registro es un empleado
