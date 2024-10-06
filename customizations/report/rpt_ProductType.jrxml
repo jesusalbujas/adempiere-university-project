@@ -16,16 +16,25 @@
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="RECORD_ID" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT 
+	pr.M_Product_Category_ID,
 	pr.Value,
 	pr.Name,
 	inf.Logo_ERP AS Logo_ERP
 FROM M_Product_Category pr
 INNER JOIN AD_Client ac ON(pr.AD_Client_ID=ac.AD_Client_ID)
 INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
-WHERE pr.AD_Org_ID != 0 AND pr.AD_Org_ID = 50006]]>
+WHERE pr.AD_Org_ID != 0 
+AND pr.AD_Org_ID = 50006
+AND (pr.M_Product_Category_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)]]>
 	</queryString>
+	<field name="m_product_category_id" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="m_product_category_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="m_product_category_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_product_category"/>
+	</field>
 	<field name="value" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="value"/>
 		<property name="com.jaspersoft.studio.field.label" value="value"/>
@@ -73,7 +82,7 @@ WHERE pr.AD_Org_ID != 0 AND pr.AD_Org_ID = 50006]]>
 	<pageHeader>
 		<band height="30">
 			<staticText>
-				<reportElement mode="Opaque" x="2" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="2" y="0" width="88" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -87,7 +96,7 @@ WHERE pr.AD_Org_ID != 0 AND pr.AD_Org_ID = 50006]]>
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="111" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="30ab307a-329d-482e-a882-9dfbe6da3438">
+				<reportElement mode="Opaque" x="97" y="0" width="149" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="30ab307a-329d-482e-a882-9dfbe6da3438">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -105,15 +114,15 @@ WHERE pr.AD_Org_ID != 0 AND pr.AD_Org_ID = 50006]]>
 	<detail>
 		<band height="30">
 			<textField>
-				<reportElement x="2" y="0" width="106" height="30" uuid="e1f31d01-290c-446b-8aac-247f1b0e4942"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement x="2" y="0" width="88" height="30" uuid="e1f31d01-290c-446b-8aac-247f1b0e4942"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="111" y="0" width="113" height="30" uuid="0446e668-3b9d-4cab-8127-3e96e826ba29"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement x="97" y="0" width="149" height="30" uuid="0446e668-3b9d-4cab-8127-3e96e826ba29"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
