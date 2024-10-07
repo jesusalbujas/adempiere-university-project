@@ -16,19 +16,31 @@
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="RECORD_ID" class="java.lang.Integer"/>
+	<parameter name="JAU01_AssetMark_ID" class="java.math.BigDecimal"/>
 	<queryString>
-		<![CDATA[SELECT 
+		<![CDATA[SELECT
+ 	am.JAU01_AssetModel_ID,
 	inf.Logo_ERP AS Logo_ERP,
 	am.Value,
 	am.Name,
 	am.IsActive,
-	mk.Name AS MarkName
+	mk.Name AS MarkName,
+	mk.JAU01_AssetMark_ID
 FROM JAU01_AssetModel am
 INNER JOIN AD_Client ac ON(am.AD_Client_ID=ac.AD_Client_ID)
 INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
 INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
-WHERE am.AD_Org_ID != 0 AND am.AD_Org_ID = 50006;]]>
+WHERE am.AD_Org_ID != 0 
+AND am.AD_Org_ID = 50006
+AND (am.JAU01_AssetModel_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
+AND (mk.JAU01_AssetMark_ID = $P{JAU01_AssetMark_ID} OR $P{JAU01_AssetMark_ID} IS NULL)]]>
 	</queryString>
+	<field name="jau01_assetmodel_id" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="jau01_assetmodel_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="jau01_assetmodel_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
+	</field>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
 		<property name="com.jaspersoft.studio.field.label" value="logo_erp"/>
@@ -52,6 +64,11 @@ WHERE am.AD_Org_ID != 0 AND am.AD_Org_ID = 50006;]]>
 	<field name="markname" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="markname"/>
 		<property name="com.jaspersoft.studio.field.label" value="markname"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmark"/>
+	</field>
+	<field name="jau01_assetmark_id" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="jau01_assetmark_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="jau01_assetmark_id"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmark"/>
 	</field>
 	<title>

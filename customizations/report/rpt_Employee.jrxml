@@ -16,23 +16,35 @@
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="RECORD_ID" class="java.lang.Integer"/>
+	<parameter name="HR_Department_ID" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[SELECT 
+	bp.C_BPartner_ID,
     inf.Logo_ERP AS Logo_ERP,
     bp.Value,
     bp.Name,
     bp.Name2,
     bp.IsActive,
     COALESCE(bp.JAU01_Nationality || ' - ' || bp.TaxID, bp.JAU01_Nationality) AS TaxID,
-	JAU01_JobType as JobType
+	d.HR_Department_ID,
+	d.Name AS NameJob
 FROM C_BPartner bp
 INNER JOIN AD_Client ac ON(bp.AD_Client_ID=ac.AD_Client_ID)
 INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
+INNER JOIN HR_Department d ON(bp.HR_Department_ID=d.HR_Department_ID)
 WHERE bp.IsEmployee = 'Y'
   AND bp.AD_Org_ID != 0 
   AND bp.AD_Org_ID = 50006
-  AND bp.IsVendor='N']]>
+  AND bp.IsVendor='N'
+  AND (bp.C_BPartner_ID = $P{RECORD_ID} OR  $P{RECORD_ID} IS NULL)
+  AND (d.HR_Department_ID = $P{HR_Department_ID} OR $P{HR_Department_ID} IS NULL)]]>
 	</queryString>
+	<field name="c_bpartner_id" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="c_bpartner_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="c_bpartner_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
+	</field>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
 		<property name="com.jaspersoft.studio.field.label" value="logo_erp"/>
@@ -62,10 +74,15 @@ WHERE bp.IsEmployee = 'Y'
 		<property name="com.jaspersoft.studio.field.name" value="taxid"/>
 		<property name="com.jaspersoft.studio.field.label" value="taxid"/>
 	</field>
-	<field name="jobtype" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="jobtype"/>
-		<property name="com.jaspersoft.studio.field.label" value="jobtype"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
+	<field name="hr_department_id" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="hr_department_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="hr_department_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="hr_department"/>
+	</field>
+	<field name="namejob" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="namejob"/>
+		<property name="com.jaspersoft.studio.field.label" value="namejob"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="hr_department"/>
 	</field>
 	<title>
 		<band height="70" splitType="Stretch">
@@ -229,20 +246,7 @@ WHERE bp.IsEmployee = 'Y'
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{jobtype}.equals("1") ? "Desarrollo" : 
-	($F{jobtype}.equals("2") ? "Admin TI / Desarrollo de Reporte" :
-		($F{jobtype}.equals("3") ? "Soporte Master" :
-			($F{jobtype}.equals("4") ? "Soporte Junior" :
-				($F{jobtype}.equals("5") ? "Coordinador de Proyecto" :
-					($F{jobtype}.equals("6") ? "Director de Ventas y Administración" :
-						($F{jobtype}.equals("7") ? "Administrador (a)" : "--"
-						)
-					)
-				)
-			)
-		)
-	)
-)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{namejob}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -25,7 +25,7 @@
 FROM JAU01_AssetMark am
 INNER JOIN AD_Client ac ON(am.AD_Client_ID=ac.AD_Client_ID)
 INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
-WHERE am.AD_Org_ID != 0 AND am.AD_Org_ID = 50006;]]>
+WHERE am.AD_Org_ID != 0 AND am.AD_Org_ID = 50006]]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
