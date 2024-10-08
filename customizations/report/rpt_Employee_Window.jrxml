@@ -12,39 +12,33 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="257"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="738"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
 	<parameter name="RECORD_ID" class="java.lang.Integer"/>
-	<parameter name="C_BPartner_ID" class="java.math.BigDecimal"/>
-	<parameter name="Name2" class="java.lang.String"/>
+	<parameter name="HR_Department_ID" class="java.math.BigDecimal"/>
 	<queryString>
-		<![CDATA[SELECT
-    bp.C_BPartner_ID,
+		<![CDATA[SELECT 
+	bp.C_BPartner_ID,
     inf.Logo_ERP AS Logo_ERP,
-    bp.Value_Vendor AS Value,
+    bp.Value,
     bp.Name,
     bp.Name2,
     bp.IsActive,
-    Phone,
-    Phone2,
-    Address1,
-    COALESCE(bp.JAU01_LegalNature || ' ' || bp.JAU01_RIF, bp.JAU01_LegalNature) AS TaxID
+    COALESCE(bp.JAU01_Nationality || ' - ' || bp.TaxID, bp.JAU01_Nationality) AS TaxID,
+	d.HR_Department_ID,
+	d.Name AS NameJob
 FROM C_BPartner bp
-INNER JOIN AD_Client ac ON(bp.AD_Client_ID = ac.AD_Client_ID)
-INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID = inf.AD_Client_ID)
-WHERE bp.IsVendor = 'Y' 
-AND bp.AD_Org_ID != 0 
-AND bp.AD_Org_ID = 50006
-AND bp.IsEmployee = 'N'
-AND (bp.C_BPartner_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
-AND (bp.C_BPartner_ID = $P{C_BPartner_ID} OR $P{C_BPartner_ID} IS NULL)
-AND (bp.Name2 = $P{Name2} OR $P{Name2} IS NULL)
-ORDER BY
-    bp.Value ASC]]>
+INNER JOIN AD_Client ac ON(bp.AD_Client_ID=ac.AD_Client_ID)
+INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
+INNER JOIN HR_Department d ON(bp.HR_Department_ID=d.HR_Department_ID)
+WHERE bp.IsEmployee = 'Y'
+  AND bp.AD_Org_ID != 0 
+  AND bp.AD_Org_ID = 50006
+  AND bp.IsVendor='N'
+  AND (bp.C_BPartner_ID = $P{RECORD_ID} OR  $P{RECORD_ID} IS NULL)
+  AND (d.HR_Department_ID = $P{HR_Department_ID} OR $P{HR_Department_ID} IS NULL)]]>
 	</queryString>
 	<field name="c_bpartner_id" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="c_bpartner_id"/>
@@ -76,25 +70,19 @@ ORDER BY
 		<property name="com.jaspersoft.studio.field.label" value="isactive"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
 	</field>
-	<field name="phone" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="phone"/>
-		<property name="com.jaspersoft.studio.field.label" value="phone"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
-	</field>
-	<field name="phone2" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="phone2"/>
-		<property name="com.jaspersoft.studio.field.label" value="phone2"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
-	</field>
-	<field name="address1" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="address1"/>
-		<property name="com.jaspersoft.studio.field.label" value="address1"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
-	</field>
 	<field name="taxid" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="taxid"/>
 		<property name="com.jaspersoft.studio.field.label" value="taxid"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
+	</field>
+	<field name="hr_department_id" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="hr_department_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="hr_department_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="hr_department"/>
+	</field>
+	<field name="namejob" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="namejob"/>
+		<property name="com.jaspersoft.studio.field.label" value="namejob"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="hr_department"/>
 	</field>
 	<title>
 		<band height="70" splitType="Stretch">
@@ -103,10 +91,10 @@ ORDER BY
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[Proveedor]]></text>
+				<text><![CDATA[Empleado]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="506" y="50" width="120" height="20" uuid="13fcf158-58d6-4a39-b352-6fb81db32563"/>
+				<reportElement x="506" y="48" width="120" height="20" uuid="13fcf158-58d6-4a39-b352-6fb81db32563"/>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="14"/>
 				</textElement>
@@ -117,7 +105,7 @@ ORDER BY
 				<imageExpression><![CDATA[$F{logo_erp}]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="449" y="25" width="177" height="20" forecolor="#000000" uuid="dacf4793-c84d-47ba-88b0-b7801cc84f38"/>
+				<reportElement style="Column header" x="460" y="25" width="166" height="20" forecolor="#000000" uuid="d5b2df46-2b1f-439f-8e3f-d89d3fef4b62"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="9" isBold="false"/>
 				</textElement>
@@ -126,21 +114,9 @@ ORDER BY
 		</band>
 	</title>
 	<pageHeader>
-		<band height="30">
+		<band height="31">
 			<staticText>
-				<reportElement mode="Opaque" x="65" y="0" width="110" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e"/>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nombre Proveedor]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="268" y="0" width="76" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="30ab307a-329d-482e-a882-9dfbe6da3438">
+				<reportElement mode="Opaque" x="114" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -151,10 +127,38 @@ ORDER BY
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RIF]]></text>
+				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="2" y="0" width="58" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
+				<reportElement mode="Opaque" x="330" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="30ab307a-329d-482e-a882-9dfbe6da3438">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C.I]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="445" y="0" width="79" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Activo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -168,7 +172,7 @@ ORDER BY
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="347" y="0" width="75" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f766cac6-4ac8-4c57-9430-6a3da85e72ee">
+				<reportElement mode="Opaque" x="222" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="3eca6dd2-2153-4970-a0f8-7f6cb2aaa342">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -179,10 +183,10 @@ ORDER BY
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Teléfono Compañía]]></text>
+				<text><![CDATA[Apellido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="425" y="0" width="75" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="c66bea33-4a9b-44b3-8144-7f8dd9646aa7">
+				<reportElement mode="Opaque" x="526" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="67fb0d99-7900-4d34-9fe8-8ae7c5724b37">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -193,90 +197,56 @@ ORDER BY
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Teléfono Proveedor]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="503" y="0" width="89" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1cd23b56-fd05-4c35-b566-ac1a3be956ab">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Dirección]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="180" y="0" width="84" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f3fbf3b9-c671-4ca9-99c3-0084c4a472e8">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nombre Empresa]]></text>
+				<text><![CDATA[Cargo]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="31">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="180" y="1" width="84" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+		<band height="29">
+			<textField isBlankWhenNull="true">
+				<reportElement x="117" y="0" width="100" height="28" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="447" y="0" width="77" height="28" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{isactive}.equals("Y") ? "Sí" : 
+	($F{isactive}.equals("N") ? "No":  "--"
+		)
+	)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2" y="0" width="108" height="28" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="333" y="1" width="108" height="28" uuid="06e90440-26e0-4800-bd1a-3e284e720320"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taxid}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="225" y="0" width="100" height="28" uuid="d6cc7025-024f-4be4-86e4-bc8b791d3170"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="3" y="0" width="57" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
+				<reportElement x="528" y="0" width="96" height="28" uuid="4d05b3dd-bd51-451c-9f78-a6217a3076f0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="268" y="1" width="75" height="30" uuid="06e90440-26e0-4800-bd1a-3e284e720320"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{taxid}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="348" y="0" width="73" height="30" uuid="8f8fc70b-ff82-4bcf-ae77-116a0098c1ec"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="426" y="0" width="73" height="30" uuid="6f17e237-c9f6-4a93-bc97-5b0a4ade05f6"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{phone2}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="504" y="0" width="88" height="30" uuid="47297247-010a-472a-b9fb-0a0b64ec2728"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{address1}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="65" y="1" width="110" height="30" uuid="33b0754c-807a-4763-87cd-5e01302d688a">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{namejob}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
