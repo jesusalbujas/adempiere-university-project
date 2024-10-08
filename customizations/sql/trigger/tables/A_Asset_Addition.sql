@@ -7,7 +7,7 @@ VOLATILE NOT LEAKPROOF
 AS $BODY$
 BEGIN
     -- Actualizar el campo Value con el valor del id de la tabla
-    NEW.Value := NEW.A_Asset_Addition_ID::text;  -- Convertimos el valor numérico a texto
+    NEW.DocumentNo := NEW.A_Asset_Addition_ID::text;  -- Convertimos el valor numérico a texto
     RETURN NEW;
 END;
 $BODY$;
