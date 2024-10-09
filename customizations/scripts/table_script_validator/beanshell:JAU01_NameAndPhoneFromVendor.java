@@ -5,8 +5,8 @@ String phoneValue = "";
 String companyName = "";
 
 // Obtener el ID del socio de negocio (C_BPartner_ID)
-if (A_Tab.getValue("C_BPartner_ID") != null) {
-    int partnerId = (int) A_Tab.getValue("C_BPartner_ID");  // Obtener el ID del socio de negocio
+if (A_Tab.getValue("JAU01_Supplier") != null) {
+    int partnerId = (int) A_Tab.getValue("JAU01_Supplier");  // Obtener el ID del socio de negocio
 
     // Consultar el teléfono
     String sqlPhone = "SELECT Phone FROM C_BPartner WHERE C_BPartner_ID = ?";
