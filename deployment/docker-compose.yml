@@ -34,28 +34,6 @@ services:
     networks:
       - shared_network
 
-  # adempiere.zk:
-  #   image: ${ADEMPIERE_ZK_IMAGE}
-  #   container_name: ${ADEMPIERE_ZK_HOST}
-  #   restart: ${GENERIC_RESTART}
-  #   healthcheck:
-  #     test: "bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/postgresql.service/5432; exit $?;'"
-  #     interval: 10s
-  #     retries: 60
-  #     start_period: 20s
-  #     timeout: 10s
-  #   environment:
-  #     ADEMPIERE_DB_SERVER: ${ADEMPIERE_ZK_DB_HOST}
-  #     ADEMPIERE_DB_NAME: ${ADEMPIERE_ZK_DB_NAME}
-  #     ADEMPIERE_DB_USER: ${ADEMPIERE_ZK_DB_USER}
-  #     ADEMPIERE_DB_PASSWORD: ${ADEMPIERE_ZK_DB_PASSWORD}
-  #     ADEMPIERE_ZK_DB_PORT: ${ADEMPIERE_ZK_DB_PORT}
-  #   volumes:
-  #     - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
-  #     - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
-  #   networks:
-  #     - shared_network
-
   adempiere.grpc.server:
     image: ${GRPC_SERVER_IMAGE}
     container_name: ${GRPC_SERVER_HOST}
@@ -74,9 +52,15 @@ services:
       DB_USER: ${GRPC_SERVER_DB_USER}
       DB_PASSWORD: ${GRPC_SERVER_DB_PASSWORD}
       JWT_SECRET_KEY: ${GRPC_SERVER_JWT_SECRET_KEY}
+      JAVA_OPTIONS: ${GRPC_JAVA_OPTIONS}
     volumes:
       - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
       - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
+    deploy:
+      resources:
+        limits:
+          memory: '1000M' # Memory Limit
+          cpus: '1'
     networks:
       - shared_network
 
@@ -96,6 +80,11 @@ services:
     volumes:
       - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
       - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
+    deploy:
+      resources:
+        limits:
+          memory: '1600M' # Memory Limit
+          cpus: '1'
     networks:
     - shared_network
 
@@ -109,6 +98,11 @@ services:
     volumes:
       - ${TIMEZONE_PATH_ON_HOST}:${TIMEZONE_PATH_ON_CONTAINER}:${TIMEZONE_OPTIONS}    # Map the Timezone  of the host to the Timezone of the container
       - ${LOCALTIME_PATH_ON_HOST}:${LOCALTIME_PATH_ON_CONTAINER}:${LOCALTIME_OPTIONS} # Map the Localtime of the host to the Timezone of the container
+    deploy:
+      resources:
+        limits:
+          memory: '300M' # Memory Limit
+          cpus: '0.2'
     networks:
       - shared_network
 
