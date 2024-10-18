@@ -68,7 +68,7 @@ BEGIN
         INTO v_last_employee_id
         FROM A_Asset_Delivery d
         WHERE d.A_Asset_ID = NEW.A_Asset_ID
-          AND d.A_Asset_Status = 'EU'  -- Asegúrate de que buscamos registros donde el activo estaba en uso
+          AND d.A_Asset_Status = 'EU'  --  buscamos registros donde el activo estaba en uso
         ORDER BY d.Created DESC  -- Toma el último registro de asignación
         LIMIT 1;
 
@@ -83,7 +83,7 @@ BEGIN
             FROM C_BPartner e
             WHERE e.C_BPartner_ID = NEW.Last_Employee_ID;
         ELSE
-            NEW.Last_Employee_Assigned_ID := NULL;  -- Asegúrate de que sea NULL si no hay empleado
+            NEW.Last_Employee_Assigned_ID := NULL;  --  sea NULL si no hay empleado
         END IF;
 
     ELSIF NEW.IsInPosession = 'N' THEN
