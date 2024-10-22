@@ -36,8 +36,7 @@ WHERE (m.M_Product_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
 	AND (m.M_Product_ID = $P{M_Product_ID} OR $P{M_Product_ID} IS NULL)
     AND (fa.AD_Org_ID = 50006 OR fa.AD_Org_ID IS NULL)
 	AND (m.AD_Org_ID = 50006 OR m.AD_Org_ID IS NULL)
-    AND (fa.A_Asset_Status != 'DI' OR fa.A_Asset_Status IS NULL)
-    AND (fa.IsDisposed != 'N' OR fa.IsDisposed IS NULL)
+    AND (fa.IsDisposed = 'N' OR fa.IsDisposed IS NULL)
 GROUP BY
     m.M_Product_ID, m.Name, inf.Logo_ERP
 ORDER BY
