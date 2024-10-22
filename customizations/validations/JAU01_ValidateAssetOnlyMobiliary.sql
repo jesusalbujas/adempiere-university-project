@@ -1,0 +1,1 @@
+A_Asset.AD_Org_ID != 0 AND A_Asset.AD_Org_ID = 50006 AND EXISTS (SELECT 1 FROM M_Product m WHERE m.M_Product_ID = A_Asset.M_Product_ID  AND m.M_Product_Category_ID != 1)
