@@ -23,24 +23,25 @@
     m.M_Product_ID,
     m.Name AS ProductName,
     COUNT(fa.A_Asset_ID) AS AssetCount,
+    fa.IsDisposed,
+    fa.IsActive,
     inf.Logo_ERP AS Logo_ERP
 FROM
     M_Product m
  LEFT JOIN
-    A_Asset fa ON fa.M_Product_ID = m.M_Product_ID
+    A_Asset fa ON(fa.M_Product_ID = m.M_Product_ID AND fa.AD_Org_ID = 50006 AND fa.IsDisposed = 'N' AND fa.IsActive='Y')
  LEFT JOIN
-    AD_Client ac ON fa.AD_Client_ID = ac.AD_Client_ID
+    AD_Client ac ON (fa.AD_Client_ID = ac.AD_Client_ID)
  LEFT JOIN
-    AD_ClientInfo inf ON fa.AD_Client_ID = inf.AD_Client_ID
-WHERE (m.M_Product_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
+    AD_ClientInfo inf ON(fa.AD_Client_ID = inf.AD_Client_ID)
+WHERE (m.AD_Org_ID=50006)
+	AND (m.M_Product_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
 	AND (m.M_Product_ID = $P{M_Product_ID} OR $P{M_Product_ID} IS NULL)
-    AND (fa.AD_Org_ID = 50006 OR fa.AD_Org_ID IS NULL)
-	AND (m.AD_Org_ID = 50006 OR m.AD_Org_ID IS NULL)
-    AND (fa.IsDisposed = 'N' OR fa.IsDisposed IS NULL)
 GROUP BY
-    m.M_Product_ID, m.Name, inf.Logo_ERP
+    m.M_Product_ID, m.Name, inf.Logo_ERP, fa.IsDisposed, fa.IsActive
 ORDER BY
-    m.Name ASC]]>
+    m.Name ASC
+]]>
 	</queryString>
 	<field name="m_product_id" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="m_product_id"/>
@@ -55,6 +56,16 @@ ORDER BY
 	<field name="assetcount" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="assetcount"/>
 		<property name="com.jaspersoft.studio.field.label" value="assetcount"/>
+	</field>
+	<field name="isdisposed" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="isdisposed"/>
+		<property name="com.jaspersoft.studio.field.label" value="isdisposed"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
+	</field>
+	<field name="isactive" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="isactive"/>
+		<property name="com.jaspersoft.studio.field.label" value="isactive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
 	</field>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>

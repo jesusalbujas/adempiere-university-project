@@ -1,5 +1,7 @@
 eclipse.preferences.version=1
+encoding//customizations/report/rpt_Asset.jrxml=UTF-8
 encoding//customizations/report/rpt_AssetCount.jrxml=UTF-8
+encoding//customizations/report/rpt_AssetDisposal.jrxml=UTF-8
 encoding//customizations/report/rpt_AssetMark.jrxml=UTF-8
 encoding//customizations/report/rpt_AssetModel.jrxml=UTF-8
 encoding//customizations/report/rpt_Asset_Window.jrxml=UTF-8
