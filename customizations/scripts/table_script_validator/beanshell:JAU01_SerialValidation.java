@@ -3,13 +3,13 @@ import org.compiere.util.DB;
 // Inicializa la variable para almacenar el valor original del número de serie
 String originalSerNo = "";
 
-// Verifica si el campo "A_Asset_ID" tiene un valor
+// Verifica si el campo "A_Asset_ID" tiene un valor (es decir, si estamos editando un activo existente)
 if (A_Tab.getValue("A_Asset_ID") != null) {
     // Obtiene el valor original del número de serie del registro antes de realizar el cambio
     originalSerNo = DB.getSQLValueString(null, "SELECT SerNo FROM A_Asset WHERE A_Asset_ID = ?", A_Tab.getValue("A_Asset_ID"));
     System.out.println("Número de serie original: " + originalSerNo);
 
-    // Verifica si el campo "SerNo" ha sido modificado
+    // Verifica si el campo "SerNo" tiene un valor (nuevo número de serie)
     if (A_Tab.getValue("SerNo") != null) {
         // Obtiene el nuevo valor del número de serie
         String newSerNo = A_Tab.getValue("SerNo").toString();
@@ -25,15 +25,11 @@ if (A_Tab.getValue("A_Asset_ID") != null) {
             if (count > 0) {
                 System.out.println("El nuevo número de serie ya existe en la base de datos: " + newSerNo);
 
-                // Vacía el campo "SerNo" en el registro actual
-                A_Tab.setValue("SerNo", "");  // Limpia el valor del campo
-                System.out.println("El número de serie ha sido vaciado en el registro actual.");
-
                 // Restaura el valor original del número de serie
                 A_Tab.setValue("SerNo", originalSerNo);
                 System.out.println("El número de serie ha sido restaurado al valor original: " + originalSerNo);
             } else {
-                System.out.println("El nuevo número de serie no existe en la base de datos. No se realizan cambios.");
+                System.out.println("El nuevo número de serie no existe en la base de datos. Guardando el nuevo número.");
             }
         } else {
             System.out.println("El nuevo número de serie es el mismo que el original. No se realizan cambios.");
