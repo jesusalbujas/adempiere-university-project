@@ -5,21 +5,29 @@ import org.compiere.model.Query
 
 // Obtener el ID del activo
 def getAssetId() {
-    // Obtener el parámetro como cadena
     String assetIdString = A_ProcessInfo.getParameterAsString("A_Asset_ID")
-
-    // Verificar si la cadena es nula o vacía
     if (assetIdString == null || assetIdString.trim().isEmpty()) {
         return null
     }
-
-    // Convertir a Integer
     return assetIdString.toInteger()
 }
 
 // Obtener el ID del socio de negocios (C_BPartner_ID) desde el contexto
 def getBPartnerId() {
     return A_ProcessInfo.getParameterAsInt("C_BPartner_ID")
+}
+
+// Obtener el estatus de devolución enviado desde A_Asset_Status_Devolution_Proc
+def getAssetStatus() {
+    String status = A_ProcessInfo.getParameterAsString("A_Asset_Status_Devolution_Proc")
+    if (status == null || status.trim().isEmpty()) {
+        // Si no se selecciona ningún estatus, se asigna "DB" por defecto
+        status = "DB"
+        println("No se seleccionó estatus, se asigna por defecto: " + status)
+    } else {
+        println("Estatus recibido: " + status)
+    }
+    return status.trim()
 }
 
 // Obtener parámetros
@@ -42,15 +50,26 @@ try {
     // Obtener el activo
     MAsset asset = new MAsset(ctx, assetId, trxName)
 
-    // Actualizar estado del activo
-    asset.setIsInPosession(isReturned)
+    // Actualizar estado del activo (posesión)
+    asset.setIsInPosession(isReturned) // Cambia a true o false según se devuelve
     asset.saveEx()
 
     // Crear entrega de activo
     int bPartnerId = getBPartnerId()
     MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, 0, movementDate)
     assetDelivery.setDescription(description)
+
+    // Obtener y asignar el estatus de devolución
+    String assetStatus = getAssetStatus()
+    println("AssetStatus recibido o asignado: " + assetStatus)  // Log para ver qué estatus se está enviando
+
+    // Asignar el estatus al campo A_Asset_Status
+    assetDelivery.set_ValueOfColumn("A_Asset_Status", assetStatus)
+    println("Estatus asignado a A_Asset_Status: " + assetStatus)
+
+    // Guardar la entrega de activo
     assetDelivery.saveEx()
+    println("Registro guardado en A_Asset_Delivery con ID: ${assetDelivery.getA_Asset_Delivery_ID()}")
 
     delivered++
     println("Activo procesado: ${asset.getA_Asset_ID()}")

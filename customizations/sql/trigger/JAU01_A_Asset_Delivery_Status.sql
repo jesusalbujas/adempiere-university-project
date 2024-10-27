@@ -35,3 +35,8 @@ CREATE TRIGGER trg_check_asset_status
 AFTER INSERT ON a_asset_delivery
 FOR EACH ROW
 EXECUTE FUNCTION check_asset_status();
+
+----
+---- Inactivar el trigger
+----
+ALTER TABLE a_asset_delivery DISABLE TRIGGER trg_check_asset_status;

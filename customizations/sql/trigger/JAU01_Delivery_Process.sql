@@ -62,7 +62,7 @@ DECLARE
     v_last_employee_id NUMERIC(10);
 BEGIN
     -- Verifica si el activo ha sido devuelto (IsInPosession = 'Y' y el estado es 'DB')
-    IF NEW.IsInPosession = 'Y' AND NEW.A_Asset_Status = 'DB' THEN
+    IF NEW.IsInPosession = 'Y' AND NEW.A_Asset_Status = 'DB' OR NEW.A_Asset_Status = 'RB' OR NEW.A_Asset_Status = 'DNC' OR NEW.A_Asset_Status = 'PR' THEN
         -- Busca el último empleado asignado desde el registro anterior donde el activo estaba en posesión
         SELECT d.Last_Employee_ID
         INTO v_last_employee_id
@@ -103,24 +103,3 @@ FOR EACH ROW
 EXECUTE FUNCTION handle_asset_return();
 
 ------------------------------------------------------
-------------------------------------------------------
-
--- Trigger para vaciar el C_BPartner_ID cuando se inserta un registro y el estado es 'DB'
-CREATE OR REPLACE FUNCTION clear_cbpartner_on_insert()
-RETURNS trigger AS $$
-BEGIN
-    -- Verifica si el estado del activo es 'DB' (disponible)
-    IF NEW.A_Asset_Status = 'DB' THEN
-        -- Limpia el campo C_BPartner_ID
-        NEW.C_BPartner_ID := NULL;  -- Vacía el C_BPartner_ID
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Creación del trigger
-CREATE TRIGGER trg_clear_cbpartner
-BEFORE INSERT ON A_Asset_Delivery
-FOR EACH ROW
-EXECUTE FUNCTION clear_cbpartner_on_insert();
