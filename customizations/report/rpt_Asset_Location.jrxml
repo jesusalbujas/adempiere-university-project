@@ -38,8 +38,7 @@ INNER JOIN
 WHERE fa.AD_Org_ID = 50006
 AND fa.IsDisposed='N'
 AND fa.IsActive='Y'
-ORDER BY fa.MovementDate DESC
-]]>
+ORDER BY fa.MovementDate DESC]]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
@@ -198,7 +197,7 @@ ORDER BY fa.MovementDate DESC
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{movementdate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a").format($F{movementdate})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="90" height="30" uuid="28061e37-c917-42aa-8163-e5934c366f56"/>

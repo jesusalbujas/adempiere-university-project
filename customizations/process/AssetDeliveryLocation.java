@@ -1,41 +1,47 @@
 // groovy:AssetLocationUpdateProcessWithDates
-import org.compiere.asset.model.MAsset
-import java.sql.Timestamp
+import org.compiere.asset.model.MAsset;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 
 // Obtener el ID del activo
 def getAssetId() {
     String assetIdString = A_ProcessInfo.getParameterAsString("A_Asset_ID")
     if (assetIdString == null || assetIdString.trim().isEmpty()) {
-        return null
+        return null;
     }
-    return assetIdString.toInteger()
+    return assetIdString.toInteger();
 }
 
 // Obtener el ID de la nueva ubicación desde JAU01_Location_Assigned
 def getNewLocatorId() {
     String newLocatorIdString = A_ProcessInfo.getParameterAsString("JAU01_Location_Assigned")
     if (newLocatorIdString == null || newLocatorIdString.trim().isEmpty()) {
-        return null
+        return null;
     }
-    return newLocatorIdString.toInteger()
+    return newLocatorIdString.toInteger();
 }
 
-// Obtener la fecha de movimiento como parámetro
+// Obtener la fecha y hora de movimiento como parámetro
 def getMovementDate() {
-    Timestamp movementDate = A_ProcessInfo.getParameterAsTimestamp("MovementDate")
+    // Aquí asumimos que el parámetro MovementDate es un tipo de dato que incluye la hora
+    def movementDate = A_ProcessInfo.getParameterAsTimestamp("MovementDate")
     if (movementDate == null) {
-        return new Timestamp(System.currentTimeMillis())
+        // Si no se proporciona, usar la fecha y hora actual en UTC
+        return ZonedDateTime.now(ZoneId.of("UTC"))
     }
-    return movementDate
+    
+    // Convertir el Timestamp a ZonedDateTime
+    return movementDate.toInstant().atZone(ZoneId.systemDefault())
 }
 
 // Obtener parámetros necesarios
-def ctx = A_Ctx
-def trxName = A_TrxName
-def defaultLocatorId = 50006  // ID de ubicación por defecto
+def ctx = A_Ctx;
+def trxName = A_TrxName;
+def defaultLocatorId = 50006;  // ID de ubicación por defecto
 
 // Obtener IDs
-def assetId = getAssetId()
+def assetId = getAssetId();
 def newLocatorId = getNewLocatorId()
 
 // Validar que ambos parámetros estén presentes
@@ -64,18 +70,18 @@ try {
     // Determinar si es una entrega o una devolución
     if (currentLocatorId == defaultLocatorId && newLocatorId != defaultLocatorId) {
         // Es una entrega (movimiento desde la ubicación por defecto a otra)
-        asset.set_ValueOfColumn("DateDelivered", movementDate) // Usar Timestamp
+        asset.set_ValueOfColumn("DateDelivered", movementDate) // Usar ZonedDateTime
         println("Fecha de entrega asignada: DateDelivered=${movementDate}")
     } else if (currentLocatorId != defaultLocatorId && newLocatorId == defaultLocatorId) {
         // Es una devolución (movimiento de otra ubicación a la ubicación por defecto)
-        asset.set_ValueOfColumn("DateReturned", movementDate) // Usar Timestamp
+        asset.set_ValueOfColumn("DateReturned", movementDate) // Usar ZonedDateTime
         println("Fecha de retorno asignada: DateReturned=${movementDate}")
     } else if (currentLocatorId != defaultLocatorId && newLocatorId != defaultLocatorId) {
         // Movimiento de una ubicación distinta a otra que no es la por defecto
         def dateDelivered = asset.get_Value("DateDelivered")
         if (dateDelivered == null) {
             // Si nunca se ha entregado antes, registrar la fecha de entrega
-            asset.set_ValueOfColumn("DateDelivered", movementDate) // Usar Timestamp
+            asset.set_ValueOfColumn("DateDelivered", movementDate) // Usar ZonedDateTime
             println("Fecha de entrega asignada por primera vez: DateDelivered=${movementDate}")
         }
         asset.set_ValueOfColumn("DateReturned", null) // Reiniciar la fecha de retorno al mover a otra ubicación
@@ -83,7 +89,11 @@ try {
 
     // Actualizar la ubicación a la nueva (JAU01_Location_Assigned)
     asset.set_ValueOfColumn("M_Locator_ID", newLocatorId)
-    asset.set_ValueOfColumn("MovementDate", movementDate) // Mantener como Timestamp
+
+    // Convertir ZonedDateTime a Timestamp antes de guardar
+    Timestamp movementTimestamp = Timestamp.from(movementDate.toInstant())
+    asset.set_ValueOfColumn("MovementDate", movementTimestamp) // Guardar como Timestamp
+
     asset.saveEx()
 
     // Confirmación de que las fechas se han guardado correctamente
