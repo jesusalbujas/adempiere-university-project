@@ -51,9 +51,13 @@ try {
     MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, 0, movementDate)
     assetDelivery.setDescription(description)
 
-    // Asignar el estado del activo como "DB"
+    // Asignar el estado del activo como "EU"
     assetDelivery.set_ValueOfColumn("A_Asset_Status", "EU")
     println("Estatus asignado a A_Asset_Status: EU") // Log para confirmar el estatus
+
+    // Establecer IsTI en true
+    assetDelivery.set_ValueOfColumn("IsTI", true)
+    println("IsTI asignado a true") // Log para confirmar el valor de IsTI
 
     // Guardar la entrega de activo
     assetDelivery.saveEx()

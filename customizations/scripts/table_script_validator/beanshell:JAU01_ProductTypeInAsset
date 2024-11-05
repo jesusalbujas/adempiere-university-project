@@ -1,0 +1,16 @@
+// JAU01_ProductType
+import org.compiere.util.DB;
+
+int categoryId = -1;  // Inicializamos con un valor que no sea un ID válido
+
+if (A_Tab.getValue("M_Product_ID") != null) {
+    int productId = (int) A_Tab.getValue("M_Product_ID");
+    String sql = "SELECT M_Product_Category_ID FROM M_Product WHERE M_Product_ID = ?";
+    categoryId = DB.getSQLValue(null, sql, productId);  // Usamos getSQLValue para obtener un entero
+}
+
+if (categoryId > 0) {  // Verificamos que sea un ID válido
+    A_Tab.setValue("M_Product_Category_ID", categoryId);
+}
+
+result = "";

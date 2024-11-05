@@ -1,111 +1,119 @@
 // groovy:AssetLocationUpdateProcessWithDates
-import org.compiere.asset.model.MAsset;
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
-import java.time.ZoneId;
+import org.compiere.asset.model.MAsset
+import java.sql.Timestamp
+import java.time.ZonedDateTime
+import java.time.ZoneId
+import org.compiere.util.DB
+import org.compiere.util.Env
+import java.util.UUID
 
 // Obtener el ID del activo
 def getAssetId() {
     String assetIdString = A_ProcessInfo.getParameterAsString("A_Asset_ID")
     if (assetIdString == null || assetIdString.trim().isEmpty()) {
-        return null;
+        return null
     }
-    return assetIdString.toInteger();
+    return assetIdString.toInteger()
 }
 
-// Obtener el ID de la nueva ubicación desde JAU01_Location_Assigned
+// Obtener ID del parámetro JAU01_Location_Assigned
 def getNewLocatorId() {
     String newLocatorIdString = A_ProcessInfo.getParameterAsString("JAU01_Location_Assigned")
     if (newLocatorIdString == null || newLocatorIdString.trim().isEmpty()) {
-        return null;
+        return null
     }
-    return newLocatorIdString.toInteger();
+    return newLocatorIdString.toInteger()
 }
 
-// Obtener la fecha y hora de movimiento como parámetro
+// Obtener fecha y hora de movimiento
 def getMovementDate() {
-    // Aquí asumimos que el parámetro MovementDate es un tipo de dato que incluye la hora
     def movementDate = A_ProcessInfo.getParameterAsTimestamp("MovementDate")
     if (movementDate == null) {
-        // Si no se proporciona, usar la fecha y hora actual en UTC
         return ZonedDateTime.now(ZoneId.of("UTC"))
     }
-    
-    // Convertir el Timestamp a ZonedDateTime
     return movementDate.toInstant().atZone(ZoneId.systemDefault())
 }
 
-// Obtener parámetros necesarios
-def ctx = A_Ctx;
-def trxName = A_TrxName;
-def defaultLocatorId = 50006;  // ID de ubicación por defecto
+// Parámetros necesarios
+def ctx = A_Ctx
+def trxName = A_TrxName
+def defaultLocatorId = 50006
 
 // Obtener IDs
-def assetId = getAssetId();
+def assetId = getAssetId()
 def newLocatorId = getNewLocatorId()
 
-// Validar que ambos parámetros estén presentes
 if (assetId == null || newLocatorId == null) {
-    return "@Error@ @No se proporcionaron los parámetros requeridos (A_Asset_ID o JAU01_Location_Assigned).@"
+    return "@Error@ @Faltan los parámetros requeridos (Activo Fijo o Ubicación a Asignar).@"
 }
 
 try {
-    // Cargar el activo
     MAsset asset = new MAsset(ctx, assetId, trxName)
-    
-    // Verificar si el activo existe
     if (asset == null || asset.getA_Asset_ID() == 0) {
         return "@Error@ @Activo no encontrado.@"
     }
 
-    // Obtener la fecha de movimiento
     def movementDate = getMovementDate()
-
-    // Obtener la ubicación actual del activo (M_Locator_ID)
     def currentLocatorId = asset.get_ValueAsInt("M_Locator_ID")
 
-    // Asignar la ubicación actual a JAU01_Old_Location_Assigned
     asset.set_ValueOfColumn("JAU01_Old_Location_Assigned", currentLocatorId)
 
-    // Determinar si es una entrega o una devolución
     if (currentLocatorId == defaultLocatorId && newLocatorId != defaultLocatorId) {
-        // Es una entrega (movimiento desde la ubicación por defecto a otra)
-        asset.set_ValueOfColumn("DateDelivered", movementDate) // Usar ZonedDateTime
-        println("Fecha de entrega asignada: DateDelivered=${movementDate}")
+        asset.set_ValueOfColumn("DateDelivered", movementDate)
     } else if (currentLocatorId != defaultLocatorId && newLocatorId == defaultLocatorId) {
-        // Es una devolución (movimiento de otra ubicación a la ubicación por defecto)
-        asset.set_ValueOfColumn("DateReturned", movementDate) // Usar ZonedDateTime
-        println("Fecha de retorno asignada: DateReturned=${movementDate}")
+        asset.set_ValueOfColumn("DateReturned", movementDate)
     } else if (currentLocatorId != defaultLocatorId && newLocatorId != defaultLocatorId) {
-        // Movimiento de una ubicación distinta a otra que no es la por defecto
-        def dateDelivered = asset.get_Value("DateDelivered")
-        if (dateDelivered == null) {
-            // Si nunca se ha entregado antes, registrar la fecha de entrega
-            asset.set_ValueOfColumn("DateDelivered", movementDate) // Usar ZonedDateTime
-            println("Fecha de entrega asignada por primera vez: DateDelivered=${movementDate}")
+        if (asset.get_Value("DateDelivered") == null) {
+            asset.set_ValueOfColumn("DateDelivered", movementDate)
         }
-        asset.set_ValueOfColumn("DateReturned", null) // Reiniciar la fecha de retorno al mover a otra ubicación
+        asset.set_ValueOfColumn("DateReturned", null)
     }
 
-    // Actualizar la ubicación a la nueva (JAU01_Location_Assigned)
     asset.set_ValueOfColumn("M_Locator_ID", newLocatorId)
 
-    // Convertir ZonedDateTime a Timestamp antes de guardar
     Timestamp movementTimestamp = Timestamp.from(movementDate.toInstant())
-    asset.set_ValueOfColumn("MovementDate", movementTimestamp) // Guardar como Timestamp
-
+    asset.set_ValueOfColumn("MovementDate", movementTimestamp)
     asset.saveEx()
 
-    // Confirmación de que las fechas se han guardado correctamente
-    def dateDeliveredDB = asset.get_Value("DateDelivered")
-    def dateReturnedDB = asset.get_Value("DateReturned")
-    def movementDateDB = asset.get_Value("MovementDate")
-    println("Confirmación post-guardado: DateDelivered=${dateDeliveredDB}, DateReturned=${dateReturnedDB}, MovementDate=${movementDateDB}")
+    // Insertar registro en A_Asset_Delivery
+    def uuid = UUID.randomUUID().toString()
+    def adClientId = asset.getAD_Client_ID()
+    def adOrgId = asset.getAD_Org_ID()
+    def createdDate = new Timestamp(System.currentTimeMillis())
+    def adUserId = Env.getAD_User_ID(ctx)
+    def isActive = 'Y'
+    def assetSerialNumber = asset.getSerNo() ?: ''
+    def nextSeqNo = DB.getSQLValue(trxName, "SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 999) + 1 FROM A_Asset_Delivery")
 
-    println("Ubicación actualizada para el activo ID ${asset.getA_Asset_ID()}: Nueva ubicación M_Locator_ID=${newLocatorId}")
-    
-    return "@Proceso completado@: Ubicación y fechas actualizadas para el activo ID ${asset.getA_Asset_ID()}."
+    // Intercambiar valores de M_Locator_ID y JAU01_Location_Assigned para el insert
+    String insertSql = """
+        INSERT INTO A_Asset_Delivery (
+            AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
+            Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, JAU01_Location_Assigned,
+            MovementDate, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+    DB.executeUpdateEx(insertSql, [
+        adClientId,
+        adOrgId,
+        createdDate,
+        adUserId,
+        isActive,
+        nextSeqNo,
+        createdDate,
+        adUserId,
+        uuid,
+        assetId,
+        assetSerialNumber,
+        newLocatorId,           // JAU01_Location_Assigned será el valor del parámetro M_Locator_ID
+        movementTimestamp,
+        'Y',  // IsAssigned
+        'Y',  // IsMobiliary
+        'Y',  // IsReubicate
+        currentLocatorId        // M_Locator_ID será el valor de JAU01_Location_Assigned
+    ] as Object[], trxName)
+
+    return "@Proceso completado@: Reubicación de activo completado con éxito."
 } catch (Exception e) {
-    println("Error al actualizar la ubicación para el activo ID: ${assetId}, Mensaje: ${e.getMessage()}")
+    println("Error al actualizar ubicación del activo ID: ${assetId}, Mensaje: ${e.getMessage()}")
     return "@Error@ Error al actualizar la ubicación: ${e.getMessage()}"
 }

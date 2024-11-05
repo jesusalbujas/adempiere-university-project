@@ -67,6 +67,10 @@ try {
     assetDelivery.set_ValueOfColumn("A_Asset_Status", assetStatus)
     println("Estatus asignado a A_Asset_Status: " + assetStatus)
 
+    // Establecer IsTI en true
+    assetDelivery.set_ValueOfColumn("IsTI", true)
+    println("IsTI asignado a true") // Log para confirmar el valor de IsTI
+
     // Guardar la entrega de activo
     assetDelivery.saveEx()
     println("Registro guardado en A_Asset_Delivery con ID: ${assetDelivery.getA_Asset_Delivery_ID()}")
