@@ -37,7 +37,8 @@ INNER JOIN C_UOM_Trl ut ON(ut.C_UOM_ID=u.C_UOM_ID)
 WHERE p.AD_Org_ID != 0 
 AND p.AD_Org_ID = 50006
 AND  (p.M_Product_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
-AND (pc.M_Product_Category_ID = $P{M_Product_Category_ID} OR $P{M_Product_Category_ID} IS NULL)]]>
+AND (pc.M_Product_Category_ID = $P{M_Product_Category_ID} OR $P{M_Product_Category_ID} IS NULL)
+ORDER BY p.Value ASC]]>
 	</queryString>
 	<field name="m_product_id" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="m_product_id"/>
