@@ -2,18 +2,14 @@
 import org.compiere.asset.model.MAsset
 import org.compiere.asset.model.MAssetDelivery
 import org.compiere.model.Query
+import org.compiere.util.DB
 
 // Obtener el ID del activo
 def getAssetId() {
-    // Obtener el parámetro como cadena
     String assetIdString = A_ProcessInfo.getParameterAsString("A_Asset_ID")
-
-    // Verificar si la cadena es nula o vacía
     if (assetIdString == null || assetIdString.trim().isEmpty()) {
         return null
     }
-
-    // Convertir a Integer
     return assetIdString.toInteger()
 }
 
@@ -35,6 +31,9 @@ if (assetId == null) {
     return "@Error@ @No se seleccionó ningún activo fijo.@"
 }
 
+// Generar el próximo valor para A_Asset_Delivery_ID, comenzando desde 100000
+def nextSeqNo = DB.getSQLValue(trxName, "SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 99999) + 1 FROM A_Asset_Delivery")
+
 // Procesar el activo
 int delivered = 0
 int errors = 0
@@ -44,6 +43,13 @@ try {
 
     // Actualizar estado del activo
     asset.setIsInPosession(isReturned)
+
+    // Vaciar los campos JAU01_M_Locator y M_Locator_ID
+    asset.set_ValueOfColumn("JAU01_M_Locator", null)
+    asset.set_ValueOfColumn("M_Locator_ID", null)
+    println("Campos JAU01_M_Locator y M_Locator_ID vaciados") // Log para confirmar
+
+    // Guardar cambios en el activo
     asset.saveEx()
 
     // Crear entrega de activo
@@ -58,6 +64,10 @@ try {
     // Establecer IsTI en true
     assetDelivery.set_ValueOfColumn("IsTI", true)
     println("IsTI asignado a true") // Log para confirmar el valor de IsTI
+
+    // Asignar el ID de entrega de activo utilizando el próximo valor generado
+    assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
+    println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
 
     // Guardar la entrega de activo
     assetDelivery.saveEx()

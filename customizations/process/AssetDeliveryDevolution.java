@@ -2,6 +2,8 @@
 import org.compiere.asset.model.MAsset
 import org.compiere.asset.model.MAssetDelivery
 import org.compiere.model.Query
+import org.compiere.util.DB
+
 
 // Obtener el ID del activo
 def getAssetId() {
@@ -43,7 +45,17 @@ if (assetId == null) {
     return "@Error@ @No se seleccionó ningún activo fijo.@"
 }
 
-// Procesar el activo
+// Generar el próximo valor para A_Asset_Delivery_ID, comenzando desde 300001
+def nextSeqNo = DB.getSQLValue(trxName, 
+    """
+    SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 299999) + 1
+    FROM A_Asset_Delivery
+    """)
+    
+// Asegurarse de que nextSeqNo no sea menor que 300001
+nextSeqNo = Math.max(nextSeqNo, 300001)
+
+println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
 int delivered = 0
 int errors = 0
 try {
@@ -70,6 +82,10 @@ try {
     // Establecer IsTI en true
     assetDelivery.set_ValueOfColumn("IsTI", true)
     println("IsTI asignado a true") // Log para confirmar el valor de IsTI
+
+    // Asignar el ID de entrega de activo utilizando el próximo valor generado
+    assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
+    println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
 
     // Guardar la entrega de activo
     assetDelivery.saveEx()
