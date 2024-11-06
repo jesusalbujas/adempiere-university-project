@@ -29,18 +29,22 @@
 FROM
     M_Product m
  LEFT JOIN
-    A_Asset fa ON(fa.M_Product_ID = m.M_Product_ID AND fa.AD_Org_ID = 50006 AND fa.IsDisposed = 'N' AND fa.IsActive='Y')
+    A_Asset fa ON (fa.M_Product_ID = m.M_Product_ID AND fa.AD_Org_ID = 50006 AND fa.IsDisposed = 'N' AND fa.IsActive='Y')
  LEFT JOIN
     AD_Client ac ON (fa.AD_Client_ID = ac.AD_Client_ID)
  LEFT JOIN
-    AD_ClientInfo inf ON(fa.AD_Client_ID = inf.AD_Client_ID)
-WHERE (m.AD_Org_ID=50006)
-	AND (m.M_Product_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
-	AND (m.M_Product_ID = $P{M_Product_ID} OR $P{M_Product_ID} IS NULL)
+    AD_ClientInfo inf ON (fa.AD_Client_ID = inf.AD_Client_ID)
+WHERE 
+    m.AD_Org_ID = 50006
+    AND (m.M_Product_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
+    AND (m.M_Product_ID = $P{M_Product_ID} OR $P{M_Product_ID} IS NULL)
 GROUP BY
     m.M_Product_ID, m.Name, inf.Logo_ERP, fa.IsDisposed, fa.IsActive
+HAVING
+    COUNT(fa.A_Asset_ID) > 0
 ORDER BY
-    m.Name ASC]]>
+    m.Name ASC
+]]>
 	</queryString>
 	<field name="m_product_id" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="m_product_id"/>
