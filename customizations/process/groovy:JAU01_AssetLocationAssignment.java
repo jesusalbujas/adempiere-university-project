@@ -112,7 +112,7 @@ try {
         'Y'   // IsMobiliary
     ] as Object[], trxName)
 
-    println("Ubicación asignada y campo IsAssignedUbication actualizado para el activo ID ${asset.getA_Asset_ID()}")
+    println("Ubicación asignada para activo ${asset.getA_Asset_ID()}")
 
     return "@Proceso completado@: Ubicación asignada y campo IsAssignedUbication marcado como verdadero para el activo ID ${asset.getA_Asset_ID()}."
 } catch (Exception e) {

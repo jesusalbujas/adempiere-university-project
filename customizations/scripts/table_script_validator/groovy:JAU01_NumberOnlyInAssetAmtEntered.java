@@ -9,12 +9,12 @@ try {
     if (assetAmtEntered != null) {
         // Verifica si contiene solo números con un punto decimal opcional
         if (!assetAmtEntered.matches("^\\d+(\\.\\d+)?\$")) {
-            return "@Error@ El valor del activo  no puede contener caracteres especiales excepto puntos decimales, verifique e intente nuevamente.";
+            return "@Error@ El Costo del Activo no puede contener caracteres especiales excepto puntos decimales, verifique e intente nuevamente.";
         }
 
         // Verifica que el valor no sea cero
         if (Double.parseDouble(assetAmtEntered) == 0) {
-            return "@Error@ El valor del activo  no puede ser cero, verifique los datos introducidos e intente nuevamente.";
+            return "@Error@ El Costo del Activo no puede ser cero, verifique los datos introducidos e intente nuevamente.";
         }
     }
 

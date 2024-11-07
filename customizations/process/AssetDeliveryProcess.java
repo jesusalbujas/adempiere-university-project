@@ -65,6 +65,10 @@ try {
     assetDelivery.set_ValueOfColumn("IsTI", true)
     println("IsTI asignado a true") // Log para confirmar el valor de IsTI
 
+    // Establecer IsTI en true
+    assetDelivery.set_ValueOfColumn("IsAssignedTI", true)
+    println("IsAssignedTI asignado a true") // Log para confirmar el valor de IsTI
+
     // Asignar el ID de entrega de activo utilizando el próximo valor generado
     assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
     println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado

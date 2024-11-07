@@ -90,7 +90,8 @@ try {
         INSERT INTO A_Asset_Delivery (
             AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
             Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, JAU01_Location_Assigned,
-            MovementDate, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            MovementDate, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     DB.executeUpdateEx(insertSql, [
         adClientId,
@@ -104,12 +105,12 @@ try {
         uuid,
         assetId,
         assetSerialNumber,
-        newLocatorId,           // JAU01_Location_Assigned será el valor del parámetro M_Locator_ID
+        currentLocatorId,  // Aquí se inserta M_Locator_ID en JAU01_Location_Assigned
         movementTimestamp,
         'Y',  // IsAssigned
         'Y',  // IsMobiliary
         'Y',  // IsReubicate
-        currentLocatorId        // M_Locator_ID será el valor de JAU01_Location_Assigned
+        newLocatorId        // Aquí se inserta JAU01_Location_Assigned en M_Locator_ID
     ] as Object[], trxName)
 
     return "@Proceso completado@: Reubicación de activo completado con éxito."
