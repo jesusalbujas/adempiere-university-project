@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.10.0  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_Asset" pageWidth="850" pageHeight="854" orientation="Landscape" columnWidth="778" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UNIVERSITY"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERPCyA"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -25,7 +25,7 @@
 		<![CDATA[SELECT
     fa.A_Asset_ID,
 	fa.Value,
-    fa.Name AS AssetName,
+    mp.Name AS AssetName,
 	fa.A_Asset_CreateDate AS CreateDate,
 	fa.JAU01_M_Locator,
 	fa.SerNo,
@@ -45,6 +45,8 @@
     inf.Logo_ERP AS Logo_ERP
 FROM
     A_Asset fa
+INNER JOIN
+	M_product mp ON (mp.M_product_id=fa.m_product_id)
  INNER JOIN
     AD_Client ac ON(fa.AD_Client_ID = ac.AD_Client_ID)
  INNER JOIN

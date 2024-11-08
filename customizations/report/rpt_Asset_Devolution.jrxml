@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.10.0  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_Asset" pageWidth="850" pageHeight="854" orientation="Landscape" columnWidth="778" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UNIVERSITY"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERPCyA"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -24,14 +24,17 @@
     ad.A_Asset_Delivery_ID,
     ad.Serno,
     fa.A_Asset_ID,
-    fa.Name AS AssetName,
+    mp.name AS AssetName,
     COALESCE(ad.Description, '') AS Description,
     ad.A_Asset_Status,
     ad.C_BPartner_ID,
 	(ad.Last_Employee_Assigned_ID || ' ' || bp.name2) AssignedEmployee,
     (bp.Name || ' ' || bp.Name2) AS EmployeeName,
     ad.MovementDate,
-    inf.Logo_ERP AS Logo_ERP
+    inf.Logo_ERP AS Logo_ERP,
+	mrk.name as marca,
+	md.name as model,
+	cb.name as encargado
 FROM
     A_Asset_Delivery ad
 INNER JOIN
@@ -41,7 +44,15 @@ INNER JOIN
 INNER JOIN
     A_Asset fa ON ad.A_Asset_ID = fa.A_Asset_ID
 INNER JOIN
+	M_product mp ON mp.M_product_id=fa.M_product_id
+INNER JOIN
     C_BPartner bp ON ad.C_BPartner_ID = bp.C_BPartner_ID
+INNER JOIN
+	JAU01_assetmark mrk ON mrk.JAU01_assetmark_id=fa.JAU01_assetmark_id
+INNER JOIN
+	JAU01_assetmodel md ON md.JAU01_assetmodel_id=fa.JAU01_assetmodel_id
+INNER JOIN 
+	C_bpartner cb ON cb.C_bpartner_id=ad.updatedby
 WHERE (ad.A_Asset_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
 AND ad.AD_Org_ID = 50006
 AND ad.A_Asset_Status IN ('DB', 'DN', 'RB', 'PR')
@@ -71,7 +82,7 @@ ORDER BY ad.MovementDate ASC]]>
 	<field name="assetname" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="assetname"/>
 		<property name="com.jaspersoft.studio.field.label" value="assetname"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_product"/>
 	</field>
 	<field name="description" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="description"/>
@@ -105,6 +116,21 @@ ORDER BY ad.MovementDate ASC]]>
 		<property name="com.jaspersoft.studio.field.label" value="logo_erp"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ad_clientinfo"/>
 	</field>
+	<field name="marca" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="marca"/>
+		<property name="com.jaspersoft.studio.field.label" value="marca"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmark"/>
+	</field>
+	<field name="model" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="model"/>
+		<property name="com.jaspersoft.studio.field.label" value="model"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
+	</field>
+	<field name="encargado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="encargado"/>
+		<property name="com.jaspersoft.studio.field.label" value="encargado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
+	</field>
 	<title>
 		<band height="78" splitType="Stretch">
 			<staticText>
@@ -135,9 +161,9 @@ ORDER BY ad.MovementDate ASC]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="30">
+		<band height="35">
 			<staticText>
-				<reportElement mode="Opaque" x="102" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="102" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -151,7 +177,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Nombre de Activo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="192" y="0" width="66" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
+				<reportElement mode="Opaque" x="170" y="0" width="66" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -179,7 +205,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Serial]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="258" y="0" width="56" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5ffe4172-ab61-4042-8f5a-c4faa3d3db75">
+				<reportElement mode="Opaque" x="236" y="0" width="42" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5ffe4172-ab61-4042-8f5a-c4faa3d3db75">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -193,7 +219,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Estatus]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="314" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="869e2b74-537f-4ef6-b638-83df75613d29">
+				<reportElement mode="Opaque" x="390" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="432c6b65-2ef4-40c7-bed9-152f2a524488">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -204,21 +230,77 @@ ORDER BY ad.MovementDate ASC]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Último Empleado Asignado]]></text>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="458" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="ec61170b-c1cf-4b0e-b1cf-67ef0f38700e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="670" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="d5a959b7-8093-4d8a-91f7-ee8997b33069">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Encargado de la Devolucion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="526" y="0" width="144" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="69258e2d-e88b-4241-b2ed-2b5cf0e880b1">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="278" y="0" width="112" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="453463c2-ee99-40c5-841f-f9ac8398f0a5">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ultimo Empleado Asignado]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="30">
+		<band height="35">
 			<textField isBlankWhenNull="true">
-				<reportElement x="102" y="0" width="90" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="102" y="0" width="68" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{assetname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="192" y="0" width="66" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
+				<reportElement x="170" y="0" width="66" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -232,7 +314,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<textFieldExpression><![CDATA[$F{serno}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="258" y="0" width="56" height="30" uuid="f0090466-56df-4432-adf4-f207d09a4969"/>
+				<reportElement x="236" y="0" width="42" height="30" uuid="f0090466-56df-4432-adf4-f207d09a4969"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -243,15 +325,42 @@ ORDER BY ad.MovementDate ASC]]>
                 ($F{a_asset_status}.equals("PR") ? "Por Reparar" : "")
             )
         )
-    )
-]]></textFieldExpression>
+    )]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="314" y="0" width="116" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
+				<reportElement x="278" y="0" width="112" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{assignedemployee}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="68" height="30" uuid="ed44608b-03b2-4d45-afa7-8af5f96439a9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="458" y="0" width="68" height="30" uuid="1abe0701-988d-4df5-9742-d63d5d208b6c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="670" y="0" width="90" height="30" uuid="f4077f1d-a43e-465b-b938-65470a9410b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{encargado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="526" y="0" width="144" height="30" uuid="d5f28fb0-cce3-48ac-96fa-041d221569f3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.10.0  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_AssetMark" pageWidth="698" pageHeight="849" orientation="Landscape" columnWidth="626" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UNIVERSITY"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERPCyA"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -20,9 +20,15 @@
 		<![CDATA[SELECT 
 	inf.Logo_ERP AS Logo_ERP,
 	ds.DocumentNo,
-	fa.Name,
+	fa.Name as assetname,
+	fa.isactive,
+	fa.Serno,
 	ds.A_Disposed_Date,
-	ds.A_Disposed_Reason
+	ds.A_Disposed_Reason,
+	mrk.name as marca,
+	md.name as model,
+	cb.name as encargado,
+	ds.description as Description
 FROM A_Asset_Disposed ds
 INNER JOIN 
 	AD_Client ac ON(ds.AD_Client_ID=ac.AD_Client_ID)
@@ -30,6 +36,12 @@ INNER JOIN
 	AD_ClientInfo inf ON(ds.AD_Client_ID=inf.AD_Client_ID)
 INNER JOIN 
 	A_Asset fa ON(fa.A_Asset_ID=ds.A_Asset_ID)
+INNER JOIN
+	JAU01_assetmark mrk ON mrk.JAU01_assetmark_id=fa.JAU01_assetmark_id
+INNER JOIN
+	JAU01_assetmodel md ON md.JAU01_assetmodel_id=fa.JAU01_assetmodel_id
+INNER JOIN 
+	C_bpartner cb ON cb.C_bpartner_id=ds.updatedby
 WHERE ds.AD_Org_ID != 0 
 	AND ds.AD_Org_ID = 50006]]>
 	</queryString>
@@ -43,9 +55,19 @@ WHERE ds.AD_Org_ID != 0
 		<property name="com.jaspersoft.studio.field.label" value="documentno"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset_disposed"/>
 	</field>
-	<field name="name" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="name"/>
-		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	<field name="assetname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="assetname"/>
+		<property name="com.jaspersoft.studio.field.label" value="assetname"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
+	</field>
+	<field name="isactive" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="isactive"/>
+		<property name="com.jaspersoft.studio.field.label" value="isactive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
+	</field>
+	<field name="serno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="serno"/>
+		<property name="com.jaspersoft.studio.field.label" value="serno"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
 	</field>
 	<field name="a_disposed_date" class="java.sql.Timestamp">
@@ -56,6 +78,26 @@ WHERE ds.AD_Org_ID != 0
 	<field name="a_disposed_reason" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="a_disposed_reason"/>
 		<property name="com.jaspersoft.studio.field.label" value="a_disposed_reason"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset_disposed"/>
+	</field>
+	<field name="marca" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="marca"/>
+		<property name="com.jaspersoft.studio.field.label" value="marca"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmark"/>
+	</field>
+	<field name="model" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="model"/>
+		<property name="com.jaspersoft.studio.field.label" value="model"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
+	</field>
+	<field name="encargado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="encargado"/>
+		<property name="com.jaspersoft.studio.field.label" value="encargado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
+	</field>
+	<field name="description" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="description"/>
+		<property name="com.jaspersoft.studio.field.label" value="description"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset_disposed"/>
 	</field>
 	<title>
@@ -88,9 +130,9 @@ WHERE ds.AD_Org_ID != 0
 		</band>
 	</title>
 	<pageHeader>
-		<band height="30">
+		<band height="35">
 			<staticText>
-				<reportElement mode="Opaque" x="116" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="80" y="0" width="70" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -104,7 +146,63 @@ WHERE ds.AD_Org_ID != 0
 				<text><![CDATA[Activo Fijo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="225" y="0" width="125" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
+				<reportElement mode="Opaque" x="1" y="0" width="79" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="150" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="aa2726fd-2e81-481a-8d29-4df7ffba8e66">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Desincorporación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="230" y="0" width="60" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="2b87a6a0-e497-46b8-ba8a-be5f28c69002">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="290" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="ce2d52e0-0d4b-49d5-a8e8-106e8ab2cdb9">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="370" y="0" width="60" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="007bdbe1-b9f1-453e-9c69-6aa51545a974">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -118,7 +216,7 @@ WHERE ds.AD_Org_ID != 0
 				<text><![CDATA[Motivo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
+				<reportElement mode="Opaque" x="430" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="ac0ca605-0c93-47a5-b104-cbe54e76dbe4">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -129,10 +227,10 @@ WHERE ds.AD_Org_ID != 0
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Código]]></text>
+				<text><![CDATA[Descripcion de motivo ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="353" y="0" width="107" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="aa2726fd-2e81-481a-8d29-4df7ffba8e66">
+				<reportElement mode="Opaque" x="520" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="2bf10316-8aac-4883-8db8-be1edee6e158">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -141,44 +239,72 @@ WHERE ds.AD_Org_ID != 0
 					<bottomPen lineWidth="1.25" lineColor="#040357"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha de Desincorporación]]></text>
+				<text><![CDATA[Encargado]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="30">
+		<band height="35">
 			<textField isBlankWhenNull="true">
-				<reportElement x="119" y="0" width="100" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="225" y="0" width="125" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
+				<reportElement x="0" y="0" width="80" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{a_disposed_reason}.equals("D") ? "Destruido" : 
+				<textFieldExpression><![CDATA[$F{serno}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="80" y="0" width="70" height="30" uuid="a1ed3684-cf85-4b8c-be7c-2621fab9ae67"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{assetname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="150" y="0" width="80" height="30" uuid="f5aa2a62-6fe6-4472-833d-b2918e0229a4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_disposed_date}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="230" y="0" width="60" height="30" uuid="8e65ab26-50dc-4148-ae2a-d450f197f9ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="290" y="0" width="80" height="30" uuid="8df916cb-e5bf-4f63-9836-0bb7216635d6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="60" height="30" uuid="d55d3b20-9c73-4f35-87bd-685961142d04"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{a_disposed_reason}.equals("D") ? "Dañado" : 
 	($F{a_disposed_reason}.equals("T") ? "Robado":  "--"
 		)
 	)]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="2" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
+				<reportElement x="430" y="0" width="90" height="30" uuid="8208a387-e890-4bbc-a8ef-c5e002bb4a79"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{documentno}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="353" y="0" width="106" height="30" uuid="eea30f71-c9e6-47d7-9ec0-d6ece8424afd"/>
+				<reportElement x="520" y="0" width="106" height="30" uuid="50218915-71ad-42c4-a3df-34e4c770183e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{a_disposed_date})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{encargado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.10.0  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_AssetCount" pageWidth="698" pageHeight="849" orientation="Landscape" columnWidth="626" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UNIVERSITY"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERPCyA"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -25,7 +25,8 @@
     COUNT(fa.A_Asset_ID) AS AssetCount,
     fa.IsDisposed,
     fa.IsActive,
-    inf.Logo_ERP AS Logo_ERP
+    inf.Logo_ERP AS Logo_ERP,
+	mtp.name as type
 FROM
     M_Product m
  LEFT JOIN
@@ -34,17 +35,16 @@ FROM
     AD_Client ac ON (fa.AD_Client_ID = ac.AD_Client_ID)
  LEFT JOIN
     AD_ClientInfo inf ON (fa.AD_Client_ID = inf.AD_Client_ID)
+ inner JOIN
+	M_Product_Category mtp ON (mtp.m_product_category_id=m.m_product_category_id)
 WHERE 
     m.AD_Org_ID = 50006
-    AND (m.M_Product_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
-    AND (m.M_Product_ID = $P{M_Product_ID} OR $P{M_Product_ID} IS NULL)
 GROUP BY
-    m.M_Product_ID, m.Name, inf.Logo_ERP, fa.IsDisposed, fa.IsActive
+    m.M_Product_ID, m.Name, inf.Logo_ERP, fa.IsDisposed, fa.IsActive, mtp.name
 HAVING
     COUNT(fa.A_Asset_ID) > 0
 ORDER BY
-    m.Name ASC
-]]>
+m.Name ASC]]>
 	</queryString>
 	<field name="m_product_id" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="m_product_id"/>
@@ -74,6 +74,11 @@ ORDER BY
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
 		<property name="com.jaspersoft.studio.field.label" value="logo_erp"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ad_clientinfo"/>
+	</field>
+	<field name="type" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="type"/>
+		<property name="com.jaspersoft.studio.field.label" value="type"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_product_category"/>
 	</field>
 	<title>
 		<band height="78" splitType="Stretch">
@@ -105,9 +110,9 @@ ORDER BY
 		</band>
 	</title>
 	<pageHeader>
-		<band height="30">
+		<band height="35">
 			<staticText>
-				<reportElement mode="Opaque" x="116" y="0" width="124" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="110" y="0" width="124" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -134,23 +139,44 @@ ORDER BY
 				</textElement>
 				<text><![CDATA[Producto]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="234" y="0" width="124" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="695765eb-0ace-440a-933d-d96ca15e7d75">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de Producto]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="31">
+		<band height="35">
 			<textField isBlankWhenNull="true">
-				<reportElement x="119" y="0" width="121" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="113" y="0" width="121" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{assetcount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="2" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
+				<reportElement x="2" y="0" width="111" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="234" y="1" width="124" height="30" uuid="d59e8b17-5b07-4a9e-8f8b-c26e7069ff83"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
