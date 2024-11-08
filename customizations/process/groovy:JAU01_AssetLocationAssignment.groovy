@@ -92,7 +92,7 @@ try {
     String insertSql = """
         INSERT INTO A_Asset_Delivery (
             AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
-            Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, M_Locator_ID, MovementDate, IsAssigned, IsMobiliary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, M_Locator_ID, MovementDate, IsAssigned, IsMobiliary, IsMobiliaryAssigned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     DB.executeUpdateEx(insertSql, [
         adClientId,
@@ -109,7 +109,8 @@ try {
         newLocatorId,
         movementTimestamp,
         'Y',  // IsAssigned
-        'Y'   // IsMobiliary
+        'Y',   // IsMobiliary
+        'Y'
     ] as Object[], trxName)
 
     println("Ubicación asignada para activo ${asset.getA_Asset_ID()}")
