@@ -14,3 +14,6 @@ CREATE TRIGGER trg_update_asset_delivery_movementdate
 AFTER INSERT ON a_asset_delivery
 FOR EACH ROW
 EXECUTE FUNCTION update_asset_delivery_movementdate();
+
+
+ALTER TABLE a_asset_delivery DISABLE TRIGGER trg_update_asset_delivery_movementdate;

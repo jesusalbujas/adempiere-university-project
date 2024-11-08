@@ -3,6 +3,7 @@ import org.compiere.asset.model.MAsset
 import org.compiere.asset.model.MAssetDelivery
 import org.compiere.model.Query
 import org.compiere.util.DB
+import java.sql.Timestamp
 
 // Obtener el ID del activo
 def getAssetId() {
@@ -20,7 +21,7 @@ def getBPartnerId() {
 
 // Obtener parámetros
 def isReturned = A_ProcessInfo.getParameterAsBoolean("IsReturnedToOrganization")
-def movementDate = A_ProcessInfo.getParameterAsTimestamp("MovementDate")
+def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")  // Obtener el movimiento como cadena
 def description = A_ProcessInfo.getParameterAsString("Description")
 def ctx = A_Ctx
 def trxName = A_TrxName
@@ -52,6 +53,18 @@ try {
     // Guardar cambios en el activo
     asset.saveEx()
 
+    // Convertir la cadena 'movementDateAssetString' a tipo Timestamp
+    Timestamp movementDate = null
+    if (movementDateAssetString != null && !movementDateAssetString.trim().isEmpty()) {
+        try {
+            // Convertir la cadena a Timestamp, asumiendo el formato 'YYYY-MM-DD HH:MI:SS'
+            movementDate = Timestamp.valueOf(movementDateAssetString)
+        } catch (Exception e) {
+            errors++
+            println("Error al convertir el MovementDateAsset: ${e.getMessage()}")
+        }
+    }
+
     // Crear entrega de activo
     int bPartnerId = getBPartnerId()
     MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, 0, movementDate)
@@ -65,9 +78,9 @@ try {
     assetDelivery.set_ValueOfColumn("IsTI", true)
     println("IsTI asignado a true") // Log para confirmar el valor de IsTI
 
-    // Establecer IsTI en true
+    // Establecer IsAssignedTI en true
     assetDelivery.set_ValueOfColumn("IsAssignedTI", true)
-    println("IsAssignedTI asignado a true") // Log para confirmar el valor de IsTI
+    println("IsAssignedTI asignado a true") // Log para confirmar el valor de IsAssignedTI
 
     // Asignar el ID de entrega de activo utilizando el próximo valor generado
     assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
