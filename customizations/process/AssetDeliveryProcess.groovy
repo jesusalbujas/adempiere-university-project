@@ -86,6 +86,10 @@ try {
     assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
     println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
 
+    // Guardar el MovementDateAsset como cadena sin convertir en la columna MovementDateAsset
+    assetDelivery.set_ValueOfColumn("MovementDateAsset", movementDateAssetString)
+    println("Movimiento como cadena asignado a MovementDateAsset: ${movementDateAssetString}") // Log para confirmar
+
     // Guardar la entrega de activo
     assetDelivery.saveEx()
 
