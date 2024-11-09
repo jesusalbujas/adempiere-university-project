@@ -1,8 +1,6 @@
 #!/bin/bash
 createdb -U adempiere keycloak
-createdb -U adempiere adempiere_test
 pg_restore -U adempiere -d adempiere < /tmp/seed.backup -v
-pg_restore -U adempiere -d adempiere_test < /tmp/seed.backup -v
 pg_restore -U adempiere -d keycloak < /tmp/keycloak.backup -v
 
 
