@@ -1,8 +1,6 @@
-// groovy:AssetLocationUpdateProcessWithDates
+// groovy:AssetLocation
 import org.compiere.asset.model.MAsset
 import java.sql.Timestamp
-import java.time.ZonedDateTime
-import java.time.ZoneId
 import org.compiere.util.DB
 import org.compiere.util.Env
 import java.util.UUID
@@ -25,20 +23,11 @@ def getNewLocatorId() {
     return newLocatorIdString.toInteger()
 }
 
-// Obtener fecha y hora de movimiento
-def getMovementDate() {
-    def movementDate = A_ProcessInfo.getParameterAsTimestamp("MovementDate")
-    if (movementDate == null) {
-        return ZonedDateTime.now(ZoneId.of("UTC"))
-    }
-    return movementDate.toInstant().atZone(ZoneId.systemDefault())
-}
-
 // Parámetros necesarios
 def ctx = A_Ctx
 def trxName = A_TrxName
 def defaultLocatorId = 50006
-
+def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")
 // Obtener IDs
 def assetId = getAssetId()
 def newLocatorId = getNewLocatorId()
@@ -53,8 +42,18 @@ try {
         return "@Error@ @Activo no encontrado.@"
     }
 
-    def movementDate = getMovementDate()
     def currentLocatorId = asset.get_ValueAsInt("M_Locator_ID")
+
+    // Convertir la cadena 'movementDateAssetString' a tipo Timestamp
+    Timestamp movementDate = null
+    if (movementDateAssetString != null && !movementDateAssetString.trim().isEmpty()) {
+        try {
+            // Convertir la cadena a Timestamp, asumiendo el formato 'YYYY-MM-DD HH:MI:SS'
+            movementDate = Timestamp.valueOf(movementDateAssetString)
+        } catch (Exception e) {
+            println("Error al convertir MovementDateAsset: ${e.getMessage()}")
+        }
+    }
 
     asset.set_ValueOfColumn("JAU01_Old_Location_Assigned", currentLocatorId)
 
@@ -70,9 +69,10 @@ try {
     }
 
     asset.set_ValueOfColumn("M_Locator_ID", newLocatorId)
+    
+    // Asignar el valor original de MovementDateAsset como String
+    asset.set_ValueOfColumn("MovementDateAsset", movementDateAssetString)
 
-    Timestamp movementTimestamp = Timestamp.from(movementDate.toInstant())
-    asset.set_ValueOfColumn("MovementDate", movementTimestamp)
     asset.saveEx()
 
     // Insertar registro en A_Asset_Delivery
@@ -85,13 +85,12 @@ try {
     def assetSerialNumber = asset.getSerNo() ?: ''
     def nextSeqNo = DB.getSQLValue(trxName, "SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 999) + 1 FROM A_Asset_Delivery")
 
-    // Intercambiar valores de M_Locator_ID y JAU01_Location_Assigned para el insert
-    String insertSql = """
+String insertSql = """
         INSERT INTO A_Asset_Delivery (
             AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
             Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, JAU01_Location_Assigned,
-            MovementDate, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     DB.executeUpdateEx(insertSql, [
         adClientId,
@@ -106,10 +105,11 @@ try {
         assetId,
         assetSerialNumber,
         currentLocatorId,  // Aquí se inserta M_Locator_ID en JAU01_Location_Assigned
-        movementTimestamp,
+        movementDate,
+        movementDateAssetString,
         'Y',  // IsAssigned
         'Y',  // IsMobiliary
-        'Y',  // IsReubicate
+        'Y',  // IsReubicate (nombre correcto de la columna)
         newLocatorId        // Aquí se inserta JAU01_Location_Assigned en M_Locator_ID
     ] as Object[], trxName)
 

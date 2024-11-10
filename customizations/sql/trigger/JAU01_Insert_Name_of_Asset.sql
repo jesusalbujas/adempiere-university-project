@@ -21,11 +21,11 @@ BEGIN
     FROM jau01_assetmodel 
     WHERE jau01_assetmodel_id = NEW.jau01_assetmodel_id;
 
-    -- Extraer los primeros 4 caracteres de serno
-    serno_prefix := LEFT(NEW.serno, 4);
+    -- Extraer los primeros 6 caracteres de serno
+    serno_prefix := LEFT(NEW.serno, 6);
 
     -- Concatenar los valores en el formato requerido
-    NEW.name := serno_prefix || '_' || product_name || '_' || asset_mark_name || '_' || asset_model_name;
+    NEW.name := serno_prefix || ' ' || product_name || ' ' || asset_mark_name || ' ' || asset_model_name;
 
     RETURN NEW;
 END;

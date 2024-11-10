@@ -1,8 +1,6 @@
 // groovy:AssetAssignmentProcess
 import org.compiere.asset.model.MAsset
 import java.sql.Timestamp
-import java.time.ZonedDateTime
-import java.time.ZoneId
 import org.compiere.model.Query
 import org.compiere.util.DB
 import org.compiere.util.Env
@@ -26,15 +24,6 @@ def getNewLocatorId() {
     return newLocatorIdString.toInteger()
 }
 
-// Obtener la fecha de movimiento
-def getMovementDate() {
-    def movementDate = A_ProcessInfo.getParameterAsTimestamp("MovementDate")
-    if (movementDate == null) {
-        return ZonedDateTime.now(ZoneId.of("UTC"))
-    }
-    return movementDate.toInstant().atZone(ZoneId.systemDefault())
-}
-
 // Obtener parámetros necesarios
 def ctx = A_Ctx
 def trxName = A_TrxName
@@ -42,6 +31,7 @@ def trxName = A_TrxName
 // Obtener IDs
 def assetId = getAssetId()
 def newLocatorId = getNewLocatorId()
+def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")
 
 // Validar que ambos parámetros estén presentes
 if (assetId == null || newLocatorId == null) {
@@ -57,8 +47,16 @@ try {
         return "@Error@ @Activo no encontrado.@"
     }
 
-    // Obtener la fecha de movimiento
-    def movementDate = getMovementDate()
+    // Convertir la cadena 'movementDateAssetString' a tipo Timestamp
+    Timestamp movementDate = null
+    if (movementDateAssetString != null && !movementDateAssetString.trim().isEmpty()) {
+        try {
+            // Convertir la cadena a Timestamp, asumiendo el formato 'YYYY-MM-DD HH:MI:SS'
+            movementDate = Timestamp.valueOf(movementDateAssetString)
+        } catch (Exception e) {
+            println("Error al convertir MovementDateAsset: ${e.getMessage()}")
+        }
+    }
 
     // Asignar la ubicación nueva al activo
     asset.set_ValueOfColumn("M_Locator_ID", newLocatorId)
@@ -66,9 +64,8 @@ try {
     // Marcar el campo IsAssignedUbication como true
     asset.set_ValueOfColumn("IsUbicationAssigned", true)
 
-    // Convertir ZonedDateTime a Timestamp antes de guardar y asignar a DateAssignedUbication
-    Timestamp movementTimestamp = Timestamp.from(movementDate.toInstant())
-    asset.set_ValueOfColumn("DateAssignedUbication", movementTimestamp)
+    // Asignar el valor original de MovementDateAsset como String
+    asset.set_ValueOfColumn("MovementDateAsset", movementDateAssetString)
 
     // Guardar el activo
     asset.saveEx()
@@ -88,11 +85,11 @@ try {
     // Generar el próximo valor para A_Asset_Delivery_ID, comenzando desde 1000
     def nextSeqNo = DB.getSQLValue(trxName, "SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 1999) + 1 FROM A_Asset_Delivery")
 
-    // Insertar un nuevo registro en la tabla A_Asset_Delivery (sin incluir IsInPossession)
+    // Insertar un nuevo registro en la tabla A_Asset_Delivery, incluyendo MovementDate y MovementDateAsset
     String insertSql = """
         INSERT INTO A_Asset_Delivery (
             AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
-            Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, M_Locator_ID, MovementDate, IsAssigned, IsMobiliary, IsMobiliaryAssigned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, M_Locator_ID, MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsMobiliaryAssigned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     DB.executeUpdateEx(insertSql, [
         adClientId,
@@ -107,15 +104,16 @@ try {
         assetId,
         assetSerialNumber,
         newLocatorId,
-        movementTimestamp,
-        'Y',  // IsAssigned
-        'Y',   // IsMobiliary
-        'Y'
+        movementDate,             // MovementDate como Timestamp
+        movementDateAssetString,   // MovementDateAsset como String
+        'Y',                       // IsAssigned
+        'Y',                       // IsMobiliary
+        'Y'                        // IsMobiliaryAssigned
     ] as Object[], trxName)
 
     println("Ubicación asignada para activo ${asset.getA_Asset_ID()}")
 
-    return "@Proceso completado@: Ubicación asignada y campo IsAssignedUbication marcado como verdadero para el activo ID ${asset.getA_Asset_ID()}."
+    return "@Proceso completado@: Ubicación asignada correctamente."
 } catch (Exception e) {
     println("Error al asignar la ubicación para el activo ID: ${assetId}, Mensaje: ${e.getMessage()}")
     return "@Error@ Error al asignar la ubicación: ${e.getMessage()}"
