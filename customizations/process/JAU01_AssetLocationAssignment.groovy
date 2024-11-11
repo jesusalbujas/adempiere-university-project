@@ -24,6 +24,23 @@ def getNewLocatorId() {
     return newLocatorIdString.toInteger()
 }
 
+// Obtener el ID del usuario desde los parámetros como entero
+def getUserId() {
+    try {
+        String userIdString = A_ProcessInfo.getParameterAsString("AD_User_ID")
+        if (userIdString == null || userIdString.trim().isEmpty()) {
+            println("AD_User_ID no fue proporcionado o está vacío.")
+            return null
+        }
+        int userId = userIdString.toInteger()
+        println("AD_User_ID obtenido: ${userId}")
+        return userId
+    } catch (Exception e) {
+        println("Error al convertir AD_User_ID: ${e.getMessage()}")
+        return null
+    }
+}
+
 // Obtener parámetros necesarios
 def ctx = A_Ctx
 def trxName = A_TrxName
@@ -31,11 +48,13 @@ def trxName = A_TrxName
 // Obtener IDs
 def assetId = getAssetId()
 def newLocatorId = getNewLocatorId()
+def adUserId = getUserId()
 def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")
 
-// Validar que ambos parámetros estén presentes
-if (assetId == null || newLocatorId == null) {
-    return "@Error@ @No se proporcionaron los parámetros requeridos (A_Asset_ID o M_Locator_ID).@"
+// Validar que todos los parámetros requeridos estén presentes
+if (assetId == null || newLocatorId == null || adUserId == null) {
+    println("Parámetros proporcionados - A_Asset_ID: ${assetId}, M_Locator_ID: ${newLocatorId}, AD_User_ID: ${adUserId}")
+    return "@Error@ No se proporcionaron los parámetros requeridos: A_Asset_ID, M_Locator_ID o AD_User_ID."
 }
 
 try {
@@ -78,10 +97,15 @@ try {
     def adOrgId = 50006
     def createdDate = new Timestamp(System.currentTimeMillis())
     def updatedDate = createdDate
-    def adUserId = Env.getAD_User_ID(ctx)  // Usar Env.getAD_User_ID para obtener el usuario del contexto
     def isActive = 'Y'
     def assetSerialNumber = asset.getSerNo() ?: ''
         
+    // Validar que el usuario existe en AD_User antes de continuar
+    int userExists = DB.getSQLValue(trxName, "SELECT COUNT(*) FROM ad_user WHERE ad_user_id = ?", adUserId)
+    if (userExists == 0) {
+        return "@Error@ Usuario con ID ${adUserId} no existe en la base de datos."
+    }
+
     // Generar el próximo valor para A_Asset_Delivery_ID, comenzando desde 1000
     def nextSeqNo = DB.getSQLValue(trxName, "SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 1999) + 1 FROM A_Asset_Delivery")
 
@@ -89,26 +113,27 @@ try {
     String insertSql = """
         INSERT INTO A_Asset_Delivery (
             AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
-            Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, M_Locator_ID, MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsMobiliaryAssigned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, M_Locator_ID, MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsMobiliaryAssigned, AD_User_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     DB.executeUpdateEx(insertSql, [
         adClientId,
         adOrgId,
         createdDate,
-        adUserId,
+        adUserId,                   // CreatedBy
         isActive,
         nextSeqNo,
         updatedDate,
-        adUserId,
+        adUserId,                   // UpdatedBy
         uuid,
         assetId,
         assetSerialNumber,
         newLocatorId,
-        movementDate,             // MovementDate como Timestamp
-        movementDateAssetString,   // MovementDateAsset como String
-        'Y',                       // IsAssigned
-        'Y',                       // IsMobiliary
-        'Y'                        // IsMobiliaryAssigned
+        movementDate,               // MovementDate como Timestamp
+        movementDateAssetString,     // MovementDateAsset como String
+        'Y',                         // IsAssigned
+        'Y',                         // IsMobiliary
+        'Y',                         // IsMobiliaryAssigned
+        adUserId
     ] as Object[], trxName)
 
     println("Ubicación asignada para activo ${asset.getA_Asset_ID()}")

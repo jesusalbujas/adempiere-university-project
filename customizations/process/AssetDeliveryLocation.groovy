@@ -2,7 +2,6 @@
 import org.compiere.asset.model.MAsset
 import java.sql.Timestamp
 import org.compiere.util.DB
-import org.compiere.util.Env
 import java.util.UUID
 
 // Obtener el ID del activo
@@ -23,17 +22,37 @@ def getNewLocatorId() {
     return newLocatorIdString.toInteger()
 }
 
+// Obtener el ID del usuario desde el parámetro AD_User_ID
+def getUserId() {
+    try {
+        String userIdString = A_ProcessInfo.getParameterAsString("AD_User_ID")
+        if (userIdString == null || userIdString.trim().isEmpty()) {
+            println("AD_User_ID no fue proporcionado o está vacío.")
+            return null
+        }
+        int userId = userIdString.toInteger()
+        println("AD_User_ID obtenido: ${userId}")
+        return userId
+    } catch (Exception e) {
+        println("Error al convertir AD_User_ID: ${e.getMessage()}")
+        return null
+    }
+}
+
 // Parámetros necesarios
 def ctx = A_Ctx
 def trxName = A_TrxName
 def defaultLocatorId = 50006
 def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")
+
 // Obtener IDs
 def assetId = getAssetId()
 def newLocatorId = getNewLocatorId()
+def adUserId = getUserId()
 
-if (assetId == null || newLocatorId == null) {
-    return "@Error@ @Faltan los parámetros requeridos (Activo Fijo o Ubicación a Asignar).@"
+// Validar que todos los parámetros requeridos estén presentes
+if (assetId == null || newLocatorId == null || adUserId == null) {
+    return "@Error@ @Faltan los parámetros requeridos (Activo Fijo, Ubicación a Asignar o Usuario).@"
 }
 
 try {
@@ -48,7 +67,6 @@ try {
     Timestamp movementDate = null
     if (movementDateAssetString != null && !movementDateAssetString.trim().isEmpty()) {
         try {
-            // Convertir la cadena a Timestamp, asumiendo el formato 'YYYY-MM-DD HH:MI:SS'
             movementDate = Timestamp.valueOf(movementDateAssetString)
         } catch (Exception e) {
             println("Error al convertir MovementDateAsset: ${e.getMessage()}")
@@ -69,10 +87,7 @@ try {
     }
 
     asset.set_ValueOfColumn("M_Locator_ID", newLocatorId)
-    
-    // Asignar el valor original de MovementDateAsset como String
     asset.set_ValueOfColumn("MovementDateAsset", movementDateAssetString)
-
     asset.saveEx()
 
     // Insertar registro en A_Asset_Delivery
@@ -80,17 +95,16 @@ try {
     def adClientId = asset.getAD_Client_ID()
     def adOrgId = asset.getAD_Org_ID()
     def createdDate = new Timestamp(System.currentTimeMillis())
-    def adUserId = Env.getAD_User_ID(ctx)
     def isActive = 'Y'
     def assetSerialNumber = asset.getSerNo() ?: ''
     def nextSeqNo = DB.getSQLValue(trxName, "SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 999) + 1 FROM A_Asset_Delivery")
 
-String insertSql = """
+    String insertSql = """
         INSERT INTO A_Asset_Delivery (
             AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
             Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, JAU01_Location_Assigned,
-            MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID, AD_User_ID) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     DB.executeUpdateEx(insertSql, [
         adClientId,
@@ -110,11 +124,12 @@ String insertSql = """
         'Y',  // IsAssigned
         'Y',  // IsMobiliary
         'Y',  // IsReubicate (nombre correcto de la columna)
-        newLocatorId        // Aquí se inserta JAU01_Location_Assigned en M_Locator_ID
+        newLocatorId,        // Aquí se inserta JAU01_Location_Assigned en M_Locator_ID
+        adUserId
     ] as Object[], trxName)
 
     return "@Proceso completado@: Reubicación de activo completado con éxito."
 } catch (Exception e) {
     println("Error al actualizar ubicación del activo ID: ${assetId}, Mensaje: ${e.getMessage()}")
-    return "@Error@ Error al actualizar la ubicación: ${e.getMessage()}"
+  
 }
