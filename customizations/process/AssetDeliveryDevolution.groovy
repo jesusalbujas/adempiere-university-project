@@ -1,9 +1,9 @@
 // groovy:AssetDeliveryDevolution
 import org.compiere.asset.model.MAsset
 import org.compiere.asset.model.MAssetDelivery
+import org.compiere.model.MBPartner
 import org.compiere.util.DB
 import java.sql.Timestamp
-
 
 // Obtener el ID del activo
 def getAssetId() {
@@ -56,7 +56,7 @@ def nextSeqNo = DB.getSQLValue(trxName,
 nextSeqNo = Math.max(nextSeqNo, 300001)
 
 println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
-int delivered = 0
+int returned = 0
 int errors = 0
 try {
     // Obtener el activo
@@ -95,9 +95,9 @@ try {
     assetDelivery.set_ValueOfColumn("IsTI", true)
     println("IsTI asignado a true") // Log para confirmar el valor de IsTI
     
-    // Establecer IsTI en true
+    // Establecer IsDevolutionTI en true
     assetDelivery.set_ValueOfColumn("IsDevolutionTI", true)
-    println("IsDevolutionTI asignado a true") // Log para confirmar el valor de IsTI
+    println("IsDevolutionTI asignado a true") // Log para confirmar el valor de IsDevolutionTI
 
     // Asignar el ID de entrega de activo utilizando el próximo valor generado
     assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
@@ -111,13 +111,20 @@ try {
     assetDelivery.saveEx()
     println("Registro guardado en A_Asset_Delivery con ID: ${assetDelivery.getA_Asset_Delivery_ID()}")
 
-    delivered++
-    println("Activo procesado: ${asset.getA_Asset_ID()}")
+    // Decrementar el contador de activos asignados al socio de negocios
+    MBPartner bPartner = new MBPartner(ctx, bPartnerId, trxName)
+    def assetsAssignedCount = bPartner.get_ValueAsInt("AssetsAssignedCount")
+    bPartner.set_ValueOfColumn("AssetsAssignedCount", Math.max(assetsAssignedCount - 1, 0))
+    bPartner.saveEx()
+    println("Contador de activos asignados actualizado: ${assetsAssignedCount - 1}")
+
+    returned++
+    println("Activo procesado para devolución: ${asset.getA_Asset_ID()}")
 } catch (Exception e) {
     errors++
     println("Error procesando activo ID: ${assetId}, Mensaje: ${e.getMessage()}")
 }
 
 // Resultados del proceso
-println("Proceso finalizado: Entregados=${delivered}, Errores=${errors}")
-return "@Devueltos@=${delivered} - @Errores@=${errors}"
+println("Proceso finalizado: Devueltos=${returned}, Errores=${errors}")
+return "@Devueltos@=${returned} - @Errores@=${errors}"

@@ -1,7 +1,6 @@
-// groovy:AssetDeliveryProcess
 import org.compiere.asset.model.MAsset
 import org.compiere.asset.model.MAssetDelivery
-import org.compiere.model.Query
+import org.compiere.model.MBPartner
 import org.compiere.util.DB
 import java.sql.Timestamp
 
@@ -21,7 +20,7 @@ def getBPartnerId() {
 
 // Obtener parámetros
 def isReturned = A_ProcessInfo.getParameterAsBoolean("IsReturnedToOrganization")
-def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")  // Obtener el movimiento como cadena
+def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")
 def description = A_ProcessInfo.getParameterAsString("Description")
 def ctx = A_Ctx
 def trxName = A_TrxName
@@ -32,7 +31,7 @@ if (assetId == null) {
     return "@Error@ @No se seleccionó ningún activo fijo.@"
 }
 
-// Generar el próximo valor para A_Asset_Delivery_ID, comenzando desde 100000
+// Generar el próximo valor para A_Asset_Delivery_ID
 def nextSeqNo = DB.getSQLValue(trxName, "SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 99999) + 1 FROM A_Asset_Delivery")
 
 // Procesar el activo
@@ -44,54 +43,39 @@ try {
 
     // Actualizar estado del activo
     asset.setIsInPosession(isReturned)
-
-    // Vaciar los campos JAU01_M_Locator y M_Locator_ID
     asset.set_ValueOfColumn("JAU01_M_Locator", null)
     asset.set_ValueOfColumn("M_Locator_ID", null)
-    println("Campos JAU01_M_Locator y M_Locator_ID vaciados") // Log para confirmar
-
-    // Guardar cambios en el activo
     asset.saveEx()
 
     // Convertir la cadena 'movementDateAssetString' a tipo Timestamp
-    Timestamp movementDate = null
-    if (movementDateAssetString != null && !movementDateAssetString.trim().isEmpty()) {
-        try {
-            // Convertir la cadena a Timestamp, asumiendo el formato 'YYYY-MM-DD HH:MI:SS'
-            movementDate = Timestamp.valueOf(movementDateAssetString)
-        } catch (Exception e) {
-            errors++
-            println("Error al convertir el MovementDateAsset: ${e.getMessage()}")
-        }
-    }
+    Timestamp movementDate = movementDateAssetString ? Timestamp.valueOf(movementDateAssetString) : null
 
     // Crear entrega de activo
     int bPartnerId = getBPartnerId()
+    MBPartner bPartner = new MBPartner(ctx, bPartnerId, trxName)
+
+    // Validar el límite de activos permitidos en el cargo del socio de negocios
+    def hrDepartmentId = bPartner.get_ValueAsInt("HR_Department_ID")
+    def limitAssetsAllowed = DB.getSQLValue(trxName, "SELECT LimitAssetsAllowed FROM HR_Department WHERE HR_Department_ID=?", hrDepartmentId)
+    def assetsAssignedCount = bPartner.get_ValueAsInt("AssetsAssignedCount")
+
+    if (assetsAssignedCount >= limitAssetsAllowed) {
+        return "@Error@ El empleado ya alcanzó el límite de activos permitidos."
+    }
+
+    // Crear el registro de entrega del activo
     MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, 0, movementDate)
     assetDelivery.setDescription(description)
-
-    // Asignar el estado del activo como "EU"
     assetDelivery.set_ValueOfColumn("A_Asset_Status", "EU")
-    println("Estatus asignado a A_Asset_Status: EU") // Log para confirmar el estatus
-
-    // Establecer IsTI en true
     assetDelivery.set_ValueOfColumn("IsTI", true)
-    println("IsTI asignado a true") // Log para confirmar el valor de IsTI
-
-    // Establecer IsAssignedTI en true
     assetDelivery.set_ValueOfColumn("IsAssignedTI", true)
-    println("IsAssignedTI asignado a true") // Log para confirmar el valor de IsAssignedTI
-
-    // Asignar el ID de entrega de activo utilizando el próximo valor generado
     assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
-    println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
-
-    // Guardar el MovementDateAsset como cadena sin convertir en la columna MovementDateAsset
     assetDelivery.set_ValueOfColumn("MovementDateAsset", movementDateAssetString)
-    println("Movimiento como cadena asignado a MovementDateAsset: ${movementDateAssetString}") // Log para confirmar
-
-    // Guardar la entrega de activo
     assetDelivery.saveEx()
+
+    // Incrementar el contador de activos asignados al socio de negocios
+    bPartner.set_ValueOfColumn("AssetsAssignedCount", assetsAssignedCount + 1)
+    bPartner.saveEx()
 
     delivered++
     println("Activo procesado: ${asset.getA_Asset_ID()}")
