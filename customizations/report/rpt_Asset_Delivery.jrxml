@@ -158,7 +158,7 @@ ORDER BY ad.MovementDate ASC]]>
 	<pageHeader>
 		<band height="35">
 			<staticText>
-				<reportElement mode="Opaque" x="102" y="0" width="78" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="90" y="0" width="78" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -172,21 +172,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Nombre de Activo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="180" y="0" width="66" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Fecha de Movimiento]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="102" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="413d4044-4b95-425f-93d5-7b2c9acaf2bc">
+				<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="413d4044-4b95-425f-93d5-7b2c9acaf2bc">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -200,7 +186,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Serial]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="246" y="0" width="44" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5ffe4172-ab61-4042-8f5a-c4faa3d3db75">
+				<reportElement mode="Opaque" x="334" y="0" width="44" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5ffe4172-ab61-4042-8f5a-c4faa3d3db75">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -214,7 +200,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Estatus]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="290" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="869e2b74-537f-4ef6-b638-83df75613d29">
+				<reportElement mode="Opaque" x="378" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="869e2b74-537f-4ef6-b638-83df75613d29">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -228,35 +214,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Empleado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="380" y="0" width="76" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="d81abaaf-9cac-4899-af6d-3ef7122a1f2c">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Marca]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="456" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="dd650643-e1df-49e0-ba4d-3c7ee6055250">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Modelo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="546" y="0" width="124" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="3963e9a2-1031-4358-9460-e081c60ad867">
+				<reportElement mode="Opaque" x="458" y="0" width="124" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="3963e9a2-1031-4358-9460-e081c60ad867">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -283,61 +241,82 @@ ORDER BY ad.MovementDate ASC]]>
 				</textElement>
 				<text><![CDATA[Encargado de la  asignacion]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="582" y="0" width="88" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="36d80ab0-2c8c-4aba-a723-4b9800e248f6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Movimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="244" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="c038359d-cc25-4dac-9b00-b8a229a6ec9e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="168" y="0" width="76" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="14c7996e-a89f-4700-8d90-c4ad7f909e44">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
 		<band height="35">
 			<textField isBlankWhenNull="true">
-				<reportElement x="102" y="0" width="78" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="90" y="0" width="78" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{assetname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="180" y="0" width="66" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{movementdate})]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="102" height="30" uuid="28061e37-c917-42aa-8163-e5934c366f56"/>
+				<reportElement x="0" y="0" width="90" height="30" uuid="28061e37-c917-42aa-8163-e5934c366f56"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{serno}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="246" y="0" width="44" height="30" uuid="f0090466-56df-4432-adf4-f207d09a4969"/>
+				<reportElement x="334" y="0" width="44" height="30" uuid="f0090466-56df-4432-adf4-f207d09a4969"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{a_asset_status}.equals("EU") ? "En Uso" : ($F{a_asset_status}.equals("DB") ? "Disponible" : "")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="290" y="0" width="90" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
+				<reportElement x="378" y="0" width="80" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{employeename}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="380" y="0" width="76" height="30" uuid="f5c34d60-ea21-43c1-9fb6-1814d553a2f6"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="456" y="0" width="90" height="30" uuid="ba83fee2-c039-489e-9db9-3ba874d798f0"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{modelo}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="546" y="0" width="124" height="30" uuid="05e45385-fd3e-4ea2-91a2-80dfdbbb927b"/>
+				<reportElement x="458" y="0" width="124" height="30" uuid="05e45385-fd3e-4ea2-91a2-80dfdbbb927b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -349,6 +328,27 @@ ORDER BY ad.MovementDate ASC]]>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{encargado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="582" y="0" width="88" height="30" uuid="f7b58ad1-b3c1-4711-9b3e-a3b6562917ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($F{movementdate})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="168" y="0" width="76" height="30" uuid="f82489ed-cc0e-4fc9-b495-4697cc43949c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="244" y="0" width="90" height="30" uuid="2970b4ef-6259-4c80-bf71-2cb92dbf4e57"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{modelo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -163,7 +163,7 @@ ORDER BY ad.MovementDate ASC]]>
 	<pageHeader>
 		<band height="35">
 			<staticText>
-				<reportElement mode="Opaque" x="102" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="90" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -177,7 +177,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Nombre de Activo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="170" y="0" width="66" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
+				<reportElement mode="Opaque" x="592" y="0" width="88" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -191,7 +191,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Fecha de Movimiento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="102" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="413d4044-4b95-425f-93d5-7b2c9acaf2bc">
+				<reportElement mode="Opaque" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="413d4044-4b95-425f-93d5-7b2c9acaf2bc">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -205,7 +205,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Serial]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="236" y="0" width="42" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5ffe4172-ab61-4042-8f5a-c4faa3d3db75">
+				<reportElement mode="Opaque" x="294" y="0" width="42" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5ffe4172-ab61-4042-8f5a-c4faa3d3db75">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -219,35 +219,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Estatus]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="390" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="432c6b65-2ef4-40c7-bed9-152f2a524488">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Marca]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="458" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="ec61170b-c1cf-4b0e-b1cf-67ef0f38700e">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Modelo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="670" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="d5a959b7-8093-4d8a-91f7-ee8997b33069">
+				<reportElement mode="Opaque" x="680" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="d5a959b7-8093-4d8a-91f7-ee8997b33069">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -261,7 +233,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Encargado de la Devolucion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="526" y="0" width="144" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="69258e2d-e88b-4241-b2ed-2b5cf0e880b1">
+				<reportElement mode="Opaque" x="448" y="0" width="144" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="69258e2d-e88b-4241-b2ed-2b5cf0e880b1">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -275,7 +247,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Motivo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="278" y="0" width="112" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="453463c2-ee99-40c5-841f-f9ac8398f0a5">
+				<reportElement mode="Opaque" x="336" y="0" width="112" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="453463c2-ee99-40c5-841f-f9ac8398f0a5">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -288,33 +260,61 @@ ORDER BY ad.MovementDate ASC]]>
 				</textElement>
 				<text><![CDATA[Ultimo Empleado Asignado]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="158" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="a16296ee-ed4e-4120-9f35-f773e5ec121e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="226" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="3baba22c-50d9-46f0-af83-5dc4e14a983a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
 		<band height="35">
 			<textField isBlankWhenNull="true">
-				<reportElement x="102" y="0" width="68" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="90" y="0" width="68" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{assetname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="170" y="0" width="66" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
+				<reportElement x="592" y="0" width="88" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{movementdate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format($F{movementdate})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="102" height="30" uuid="28061e37-c917-42aa-8163-e5934c366f56"/>
+				<reportElement x="0" y="0" width="90" height="30" uuid="28061e37-c917-42aa-8163-e5934c366f56"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{serno}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="236" y="0" width="42" height="30" uuid="f0090466-56df-4432-adf4-f207d09a4969"/>
+				<reportElement x="294" y="0" width="42" height="30" uuid="f0090466-56df-4432-adf4-f207d09a4969"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -328,39 +328,39 @@ ORDER BY ad.MovementDate ASC]]>
     )]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="278" y="0" width="112" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
+				<reportElement x="336" y="0" width="112" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{assignedemployee}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="390" y="0" width="68" height="30" uuid="ed44608b-03b2-4d45-afa7-8af5f96439a9"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="458" y="0" width="68" height="30" uuid="1abe0701-988d-4df5-9742-d63d5d208b6c"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="670" y="0" width="90" height="30" uuid="f4077f1d-a43e-465b-b938-65470a9410b0"/>
+				<reportElement x="680" y="0" width="80" height="30" uuid="f4077f1d-a43e-465b-b938-65470a9410b0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{encargado}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="526" y="0" width="144" height="30" uuid="d5f28fb0-cce3-48ac-96fa-041d221569f3"/>
+				<reportElement x="448" y="0" width="144" height="30" uuid="d5f28fb0-cce3-48ac-96fa-041d221569f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="158" y="0" width="68" height="30" uuid="9ac78722-8367-4232-8f33-b37c6cd77e8a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="226" y="0" width="68" height="30" uuid="bf7e39df-3ab2-4eb7-912e-9270836c6b20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

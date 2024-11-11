@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.10.0  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_Asset" pageWidth="850" pageHeight="854" orientation="Landscape" columnWidth="778" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UNIVERSITY"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERPCyA"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -20,13 +20,18 @@
 		<![CDATA[SELECT
 	inf.Logo_ERP AS Logo_ERP,
     fa.Serno,
-    fa.Name AS AssetName,
-    fa.MovementDate,
+    mp.Name AS AssetName,
+    ad.MovementDate,
     fa.M_Locator_ID,
     m.Value AS NameLocation,
     fa.JAU01_Old_Location_Assigned,
-    old.Value AS NameOld
-FROM A_Asset fa
+    old.Value AS NameOld,
+	mrk.name as marca,
+	md.name As model,
+	cb.name as encargado
+FROM A_Asset_delivery ad
+INNER JOIN A_asset fa ON ad.A_Asset_id=fa.a_asset_id
+INNER JOIN M_product mp ON mp.m_product_id=fa.m_product_id
 INNER JOIN M_Locator m ON fa.M_Locator_ID = m.M_Locator_ID
 INNER JOIN M_Locator old 
     ON fa.JAU01_Old_Location_Assigned ~ '^[0-9]+$'  -- Filtra solo valores numéricos
@@ -35,9 +40,16 @@ INNER JOIN
     AD_Client ac ON fa.AD_Client_ID = ac.AD_Client_ID
 INNER JOIN
     AD_ClientInfo inf ON fa.AD_Client_ID = inf.AD_Client_ID
-WHERE fa.AD_Org_ID = 50006
-AND fa.IsDisposed='N'
-AND fa.IsActive='Y'
+INNER JOIN
+	JAU01_assetmark mrk ON mrk.jau01_assetmark_id=fa.jau01_assetmark_id
+INNER JOIN
+	JAU01_assetmodel md ON md.jau01_assetmodel_id=fa.jau01_assetmodel_id
+INNER JOIN
+	c_bpartner cb ON cb.c_bpartner_id=ad.updatedby
+WHERE ad.AD_Org_ID != 0 
+AND ad.AD_Org_ID = 50006 
+AND ad.IsMobiliary='Y' 
+AND ad.IsReubicate = 'Y'
 ORDER BY fa.MovementDate DESC]]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
@@ -53,12 +65,12 @@ ORDER BY fa.MovementDate DESC]]>
 	<field name="assetname" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="assetname"/>
 		<property name="com.jaspersoft.studio.field.label" value="assetname"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="m_product"/>
 	</field>
 	<field name="movementdate" class="java.sql.Timestamp">
 		<property name="com.jaspersoft.studio.field.name" value="movementdate"/>
 		<property name="com.jaspersoft.studio.field.label" value="movementdate"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset_delivery"/>
 	</field>
 	<field name="m_locator_id" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="m_locator_id"/>
@@ -79,6 +91,21 @@ ORDER BY fa.MovementDate DESC]]>
 		<property name="com.jaspersoft.studio.field.name" value="nameold"/>
 		<property name="com.jaspersoft.studio.field.label" value="nameold"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_locator"/>
+	</field>
+	<field name="marca" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="marca"/>
+		<property name="com.jaspersoft.studio.field.label" value="marca"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmark"/>
+	</field>
+	<field name="model" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="model"/>
+		<property name="com.jaspersoft.studio.field.label" value="model"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
+	</field>
+	<field name="encargado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="encargado"/>
+		<property name="com.jaspersoft.studio.field.label" value="encargado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
 	</field>
 	<title>
 		<band height="78" splitType="Stretch">
@@ -110,7 +137,7 @@ ORDER BY fa.MovementDate DESC]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="30">
+		<band height="35">
 			<staticText>
 				<reportElement mode="Opaque" x="90" y="0" width="102" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -126,7 +153,7 @@ ORDER BY fa.MovementDate DESC]]>
 				<text><![CDATA[Nombre de Activo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="424" y="0" width="66" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
+				<reportElement mode="Opaque" x="573" y="0" width="87" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -154,7 +181,7 @@ ORDER BY fa.MovementDate DESC]]>
 				<text><![CDATA[Serial]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="308" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="869e2b74-537f-4ef6-b638-83df75613d29">
+				<reportElement mode="Opaque" x="457" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="869e2b74-537f-4ef6-b638-83df75613d29">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -165,10 +192,10 @@ ORDER BY fa.MovementDate DESC]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Última Ubicación Asignada]]></text>
+				<text><![CDATA[Ubicacion Anterior]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="192" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="06334620-1a80-4ed4-a9bd-3195d826233c">
+				<reportElement mode="Opaque" x="341" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="06334620-1a80-4ed4-a9bd-3195d826233c">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -181,23 +208,65 @@ ORDER BY fa.MovementDate DESC]]>
 				</textElement>
 				<text><![CDATA[Ubicación Actual]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="189" y="0" width="71" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="ea3a76d9-1a6f-4025-9605-021bdf2c6d77">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="260" y="0" width="81" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="21ec4480-5fc5-40d9-bdda-576ce945147e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="660" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="c827fd39-d17d-4592-8e17-1fa81980ab2b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Encargado del Movimiento]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="30">
+		<band height="35">
 			<textField isBlankWhenNull="true">
-				<reportElement x="90" y="0" width="102" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="90" y="0" width="99" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{assetname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="424" y="0" width="66" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
+				<reportElement x="573" y="0" width="87" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a").format($F{movementdate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format($F{movementdate})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="90" height="30" uuid="28061e37-c917-42aa-8163-e5934c366f56"/>
@@ -207,18 +276,39 @@ ORDER BY fa.MovementDate DESC]]>
 				<textFieldExpression><![CDATA[$F{serno}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="308" y="0" width="116" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
+				<reportElement x="457" y="0" width="116" height="30" uuid="83b7ba56-235f-42ec-97c0-7e626c615ef4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nameold}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="192" y="0" width="116" height="30" uuid="27e3b5c7-cf59-4567-819f-683d56c1ad4a"/>
+				<reportElement x="341" y="0" width="116" height="30" uuid="27e3b5c7-cf59-4567-819f-683d56c1ad4a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{namelocation}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="189" y="0" width="71" height="30" uuid="60999dc8-9e33-477c-a93c-ac11c8083845"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="260" y="0" width="81" height="30" uuid="b0d0814d-dbd9-40d1-bf5c-fa8f6324a099"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="660" y="0" width="100" height="30" uuid="38757441-51ec-4fe8-8e38-fef4fb5e6dbe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{encargado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
