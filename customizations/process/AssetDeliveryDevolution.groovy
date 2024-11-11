@@ -19,23 +19,24 @@ def getBPartnerId() {
     return A_ProcessInfo.getParameterAsInt("C_BPartner_ID")
 }
 
+// Obtener el ID de usuario (AD_User_ID) desde el contexto
+def getUserId() {
+    return A_ProcessInfo.getParameterAsInt("AD_User_ID")
+}
+
 // Obtener el estatus de devolución enviado desde A_Asset_Status_Devolution_Proc
 def getAssetStatus() {
     String status = A_ProcessInfo.getParameterAsString("A_Asset_Status_Devolution_Proc")
     if (status == null || status.trim().isEmpty()) {
-        // Si no se selecciona ningún estatus, se asigna "DB" por defecto
-        status = "DB"
-        println("No se seleccionó estatus, se asigna por defecto: " + status)
-    } else {
-        println("Estatus recibido: " + status)
+        status = "DB" // Si no se selecciona ningún estatus, se asigna "DB" por defecto
     }
     return status.trim()
 }
 
 // Obtener parámetros
 def isReturned = A_ProcessInfo.getParameterAsBoolean("IsReturnedToOrganization")
-def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")  // Obtener el movimiento como cadena
-def description = A_ProcessInfo.getParameterAsString("Description")  // Obtener la descripción
+def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAsset")
+def description = A_ProcessInfo.getParameterAsString("Description")
 def ctx = A_Ctx
 def trxName = A_TrxName
 
@@ -45,86 +46,63 @@ if (assetId == null) {
     return "@Error@ @No se seleccionó ningún activo fijo.@"
 }
 
-// Generar el próximo valor para A_Asset_Delivery_ID, comenzando desde 300001
+// Generar el próximo valor para A_Asset_Delivery_ID
 def nextSeqNo = DB.getSQLValue(trxName, 
     """
     SELECT COALESCE(MAX(CAST(A_Asset_Delivery_ID AS INTEGER)), 299999) + 1
     FROM A_Asset_Delivery
     """)
-    
-// Asegurarse de que nextSeqNo no sea menor que 300001
 nextSeqNo = Math.max(nextSeqNo, 300001)
 
-println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
 int returned = 0
 int errors = 0
 try {
-    // Obtener el activo
     MAsset asset = new MAsset(ctx, assetId, trxName)
-
-    // Actualizar estado del activo (posesión)
-    asset.setIsInPosession(isReturned) // Cambia a true o false según se devuelve
+    asset.setIsInPosession(isReturned)
     asset.saveEx()
 
-    // Convertir la cadena 'movementDateAssetString' a tipo Timestamp
     Timestamp movementDate = null
     if (movementDateAssetString != null && !movementDateAssetString.trim().isEmpty()) {
         try {
-            // Convertir la cadena a Timestamp, asumiendo el formato 'YYYY-MM-DD HH:MI:SS'
             movementDate = Timestamp.valueOf(movementDateAssetString)
         } catch (Exception e) {
             errors++
-            println("Error al convertir el MovementDateAsset: ${e.getMessage()}")
         }
     }
 
-    // Crear entrega de activo
     int bPartnerId = getBPartnerId()
-    MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, 0, movementDate)
+    MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, getUserId(), movementDate)
     assetDelivery.setDescription(description)
-
-    // Obtener y asignar el estatus de devolución
     String assetStatus = getAssetStatus()
-    println("AssetStatus recibido o asignado: " + assetStatus)  // Log para ver qué estatus se está enviando
-
-    // Asignar el estatus al campo A_Asset_Status
     assetDelivery.set_ValueOfColumn("A_Asset_Status", assetStatus)
-    println("Estatus asignado a A_Asset_Status: " + assetStatus)
-
-    // Establecer IsTI en true
     assetDelivery.set_ValueOfColumn("IsTI", true)
-    println("IsTI asignado a true") // Log para confirmar el valor de IsTI
-    
-    // Establecer IsDevolutionTI en true
     assetDelivery.set_ValueOfColumn("IsDevolutionTI", true)
-    println("IsDevolutionTI asignado a true") // Log para confirmar el valor de IsDevolutionTI
-
-    // Asignar el ID de entrega de activo utilizando el próximo valor generado
     assetDelivery.setA_Asset_Delivery_ID(nextSeqNo)
-    println("Nuevo ID asignado a A_Asset_Delivery_ID: ${nextSeqNo}") // Log para confirmar el ID asignado
-
-    // Guardar el MovementDateAsset como cadena sin convertir en la columna MovementDateAsset
     assetDelivery.set_ValueOfColumn("MovementDateAsset", movementDateAssetString)
-    println("Movimiento como cadena asignado a MovementDateAsset: ${movementDateAssetString}") // Log para confirmar
-
-    // Guardar la entrega de activo
     assetDelivery.saveEx()
-    println("Registro guardado en A_Asset_Delivery con ID: ${assetDelivery.getA_Asset_Delivery_ID()}")
 
-    // Decrementar el contador de activos asignados al socio de negocios
+    // Actualizar `a_asset_status_actual` en todos los activos con el mismo `A_Asset_ID`
+    int count = DB.getSQLValue(trxName, 
+        "SELECT COUNT(*) FROM A_Asset_Delivery WHERE A_Asset_ID = ?", assetId)
+    
+    if (count > 1) {
+        // Actualizar todos los registros con el mismo `A_Asset_ID`
+        DB.executeUpdate("UPDATE A_Asset_Delivery SET a_asset_status_actual = 'AD' WHERE A_Asset_ID = ?", assetId, trxName)
+    } else {
+        // Actualizar solo el registro actual
+        assetDelivery.set_ValueOfColumn("a_asset_status_actual", "AD")
+        assetDelivery.saveEx()
+    }
+
     MBPartner bPartner = new MBPartner(ctx, bPartnerId, trxName)
     def assetsAssignedCount = bPartner.get_ValueAsInt("AssetsAssignedCount")
     bPartner.set_ValueOfColumn("AssetsAssignedCount", Math.max(assetsAssignedCount - 1, 0))
     bPartner.saveEx()
-    println("Contador de activos asignados actualizado: ${assetsAssignedCount - 1}")
 
     returned++
-    println("Activo procesado para devolución: ${asset.getA_Asset_ID()}")
 } catch (Exception e) {
     errors++
-    println("Error procesando activo ID: ${assetId}, Mensaje: ${e.getMessage()}")
 }
 
 // Resultados del proceso
-println("Proceso finalizado: Devueltos=${returned}, Errores=${errors}")
 return "@Devueltos@=${returned} - @Errores@=${errors}"

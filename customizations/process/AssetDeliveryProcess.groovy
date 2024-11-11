@@ -1,3 +1,5 @@
+// AssetDeliveryProcess
+
 import org.compiere.asset.model.MAsset
 import org.compiere.asset.model.MAssetDelivery
 import org.compiere.model.MBPartner
@@ -16,6 +18,11 @@ def getAssetId() {
 // Obtener el ID del socio de negocios (C_BPartner_ID) desde el contexto
 def getBPartnerId() {
     return A_ProcessInfo.getParameterAsInt("C_BPartner_ID")
+}
+
+// Obtener el ID de usuario (AD_User_ID) desde el contexto
+def getUserId() {
+    return A_ProcessInfo.getParameterAsInt("AD_User_ID")
 }
 
 // Obtener parámetros
@@ -59,12 +66,15 @@ try {
     def limitAssetsAllowed = DB.getSQLValue(trxName, "SELECT LimitAssetsAllowed FROM HR_Department WHERE HR_Department_ID=?", hrDepartmentId)
     def assetsAssignedCount = bPartner.get_ValueAsInt("AssetsAssignedCount")
 
-    if (assetsAssignedCount >= limitAssetsAllowed) {
+    // Si el límite de activos es nulo o 0, asignar sin restricciones
+    if (limitAssetsAllowed == null || limitAssetsAllowed == 0) {
+        // No bloqueamos la asignación, simplemente asignamos el activo
+    } else if (assetsAssignedCount >= limitAssetsAllowed) {
         return "@Error@ El empleado ya alcanzó el límite de activos permitidos."
     }
 
     // Crear el registro de entrega del activo
-    MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, 0, movementDate)
+    MAssetDelivery assetDelivery = new MAssetDelivery(asset, bPartnerId, getUserId(), movementDate)
     assetDelivery.setDescription(description)
     assetDelivery.set_ValueOfColumn("A_Asset_Status", "EU")
     assetDelivery.set_ValueOfColumn("IsTI", true)
