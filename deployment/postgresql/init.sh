@@ -15,9 +15,9 @@ echo "BD keycloak restaurada"
 
 sleep 5
 
-createdb -U adempiere adempiere_test
+# createdb -U adempiere adempiere_test
 
-pg_restore -U adempiere -d adempiere_test < /tmp/seed.backup -v
+# pg_restore -U adempiere -d adempiere_test < /tmp/seed.backup -v
 
 # Aplicar tuneo a la bd
 AFTER_RUN_DIR="/tmp/after_run"
