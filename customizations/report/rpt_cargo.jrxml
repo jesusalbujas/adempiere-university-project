@@ -16,76 +16,36 @@
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
-	<parameter name="RECORD_ID" class="java.lang.Integer"/>
-	<parameter name="product_id" class="java.math.BigDecimal"/>
-	<parameter name="JAU01_AssetMark_ID" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[SELECT
- 	am.JAU01_AssetModel_ID,
 	inf.Logo_ERP AS Logo_ERP,
-	am.Value,
-	am.Name,
-	am.IsActive,
-	mk.Name AS MarkName,
-	mk.JAU01_AssetMark_ID,
-	am.m_product_id,
-	mp.name as product
-FROM JAU01_AssetModel am
-INNER JOIN AD_Client ac ON(am.AD_Client_ID=ac.AD_Client_ID)
-INNER JOIN AD_ClientInfo inf ON(ac.AD_Client_ID=inf.AD_Client_ID)
-INNER JOIN JAU01_AssetMark mk ON(am.JAU01_AssetMark_ID=mk.JAU01_AssetMark_ID)
+	dp.value as codigo,
+	dp.name as name,
+	dp.limitassetsallowed as limite
+FROM hr_department dp
 INNER JOIN 
-	M_product mp ON mp.m_product_id=am.m_product_id
-WHERE am.AD_Org_ID != 0 
-AND am.AD_Org_ID = 50006
-AND (am.JAU01_AssetModel_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
-AND (mk.JAU01_AssetMark_ID = $P{JAU01_AssetMark_ID} OR $P{JAU01_AssetMark_ID} IS NULL)
-AND (am.m_product_id= $P{product_id} OR $P{product_id} is null )]]>
+	AD_ClientInfo inf ON(dp.AD_Client_ID=inf.AD_Client_ID)
+ORDER BY dp.value asc]]>
 	</queryString>
-	<field name="jau01_assetmodel_id" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="jau01_assetmodel_id"/>
-		<property name="com.jaspersoft.studio.field.label" value="jau01_assetmodel_id"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
-	</field>
 	<field name="logo_erp" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="logo_erp"/>
 		<property name="com.jaspersoft.studio.field.label" value="logo_erp"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ad_clientinfo"/>
 	</field>
-	<field name="value" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="value"/>
-		<property name="com.jaspersoft.studio.field.label" value="value"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
+	<field name="codigo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="codigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="codigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="hr_department"/>
 	</field>
 	<field name="name" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="name"/>
 		<property name="com.jaspersoft.studio.field.label" value="name"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="hr_department"/>
 	</field>
-	<field name="isactive" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="isactive"/>
-		<property name="com.jaspersoft.studio.field.label" value="isactive"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
-	</field>
-	<field name="markname" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="markname"/>
-		<property name="com.jaspersoft.studio.field.label" value="markname"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmark"/>
-	</field>
-	<field name="jau01_assetmark_id" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="jau01_assetmark_id"/>
-		<property name="com.jaspersoft.studio.field.label" value="jau01_assetmark_id"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmark"/>
-	</field>
-	<field name="m_product_id" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="m_product_id"/>
-		<property name="com.jaspersoft.studio.field.label" value="m_product_id"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="jau01_assetmodel"/>
-	</field>
-	<field name="product" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="product"/>
-		<property name="com.jaspersoft.studio.field.label" value="product"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="m_product"/>
+	<field name="limite" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="limite"/>
+		<property name="com.jaspersoft.studio.field.label" value="limite"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="hr_department"/>
 	</field>
 	<title>
 		<band height="70" splitType="Stretch">
@@ -94,7 +54,7 @@ AND (am.m_product_id= $P{product_id} OR $P{product_id} is null )]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[Modelo]]></text>
+				<text><![CDATA[Cargos ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="506" y="50" width="120" height="20" uuid="13fcf158-58d6-4a39-b352-6fb81db32563"/>
@@ -119,7 +79,7 @@ AND (am.m_product_id= $P{product_id} OR $P{product_id} is null )]]>
 	<pageHeader>
 		<band height="35">
 			<staticText>
-				<reportElement mode="Opaque" x="117" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
+				<reportElement mode="Opaque" x="117" y="0" width="233" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -133,7 +93,7 @@ AND (am.m_product_id= $P{product_id} OR $P{product_id} is null )]]>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="226" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
+				<reportElement mode="Opaque" x="353" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="f0a08e50-a5e8-4396-8d4b-16c49e7f63da">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -144,7 +104,7 @@ AND (am.m_product_id= $P{product_id} OR $P{product_id} is null )]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Marca]]></text>
+				<text><![CDATA[Limite de activos ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="1" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1b9b04ec-98b2-4235-89be-57139af74019">
@@ -160,75 +120,30 @@ AND (am.m_product_id= $P{product_id} OR $P{product_id} is null )]]>
 				</textElement>
 				<text><![CDATA[Código]]></text>
 			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="342" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="6b09197c-555f-469f-9703-59545ee75c8b">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Activo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="458" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="ad55d5e0-8099-4bce-be81-e63eae545607">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Producto]]></text>
-			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
 		<band height="34">
 			<textField isBlankWhenNull="true">
-				<reportElement x="120" y="0" width="100" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
+				<reportElement x="120" y="0" width="230" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="228" y="0" width="108" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
+				<reportElement x="353" y="0" width="113" height="30" uuid="84e01eb0-ca60-4542-adc1-7dc99dcb4b9d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{markname}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{limite}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="3" y="0" width="108" height="30" uuid="8cf61f74-2634-423e-a313-660c6af56e05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="344" y="0" width="108" height="29" uuid="2333a70c-5405-4e9a-823c-ba2fb450410e"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{isactive}.equals("Y") ? "Sí" : 
-	($F{isactive}.equals("N") ? "No":  "--"
-		)
-	)]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="460" y="0" width="108" height="29" uuid="e2e800dc-96d8-4b3d-b52f-da5a6ef74526"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{product}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
