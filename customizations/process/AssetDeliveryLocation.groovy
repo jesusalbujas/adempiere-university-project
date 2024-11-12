@@ -52,22 +52,26 @@ def adUserId = getUserId()
 
 // Validar que todos los parámetros requeridos estén presentes
 if (assetId == null || newLocatorId == null || adUserId == null) {
+    println("Error: Faltan los parámetros requeridos.")
     return "@Error@ @Faltan los parámetros requeridos (Activo Fijo, Ubicación a Asignar o Usuario).@"
 }
 
 try {
     MAsset asset = new MAsset(ctx, assetId, trxName)
     if (asset == null || asset.getA_Asset_ID() == 0) {
+        println("Error: Activo no encontrado con ID: ${assetId}")
         return "@Error@ @Activo no encontrado.@"
     }
 
     def currentLocatorId = asset.get_ValueAsInt("M_Locator_ID")
+    println("Locator actual del activo: ${currentLocatorId}")
 
     // Convertir la cadena 'movementDateAssetString' a tipo Timestamp
     Timestamp movementDate = null
     if (movementDateAssetString != null && !movementDateAssetString.trim().isEmpty()) {
         try {
             movementDate = Timestamp.valueOf(movementDateAssetString)
+            println("Fecha de movimiento convertida: ${movementDate}")
         } catch (Exception e) {
             println("Error al convertir MovementDateAsset: ${e.getMessage()}")
         }
@@ -76,16 +80,20 @@ try {
     asset.set_ValueOfColumn("JAU01_Old_Location_Assigned", currentLocatorId)
 
     if (currentLocatorId == defaultLocatorId && newLocatorId != defaultLocatorId) {
+        println("Reubicación: Asignando fecha de entrega.")
         asset.set_ValueOfColumn("DateDelivered", movementDate)
     } else if (currentLocatorId != defaultLocatorId && newLocatorId == defaultLocatorId) {
+        println("Reubicación: Asignando fecha de devolución.")
         asset.set_ValueOfColumn("DateReturned", movementDate)
     } else if (currentLocatorId != defaultLocatorId && newLocatorId != defaultLocatorId) {
+        println("Reubicación: Fecha de entrega ya asignada, asignando fecha de devolución a null.")
         if (asset.get_Value("DateDelivered") == null) {
             asset.set_ValueOfColumn("DateDelivered", movementDate)
         }
         asset.set_ValueOfColumn("DateReturned", null)
     }
 
+    println("Actualizando el nuevo locator ID: ${newLocatorId}")
     asset.set_ValueOfColumn("M_Locator_ID", newLocatorId)
     asset.set_ValueOfColumn("MovementDateAsset", movementDateAssetString)
     asset.saveEx()
@@ -128,8 +136,21 @@ try {
         adUserId
     ] as Object[], trxName)
 
+    // Actualizar `a_asset_status_actual` en todos los registros con el mismo `A_Asset_ID`
+    int count = DB.getSQLValue(trxName, 
+        "SELECT COUNT(*) FROM A_Asset_Delivery WHERE A_Asset_ID = ?", assetId)
+    
+    if (count > 1) {
+        println("Actualizando estado de todos los registros con A_Asset_ID: ${assetId}")
+        // Actualizar todos los registros con el mismo `A_Asset_ID`
+        DB.executeUpdate("UPDATE A_Asset_Delivery SET a_asset_status_actual = 'RE' WHERE A_Asset_ID = ?", assetId, trxName)
+    } else {
+        println("Actualizando estado del registro actual con A_Asset_Delivery_ID: ${nextSeqNo}")
+        // Actualizar solo el registro actual
+        DB.executeUpdate("UPDATE A_Asset_Delivery SET a_asset_status_actual = 'RE' WHERE A_Asset_Delivery_ID = ?", nextSeqNo, trxName)
+    }
+
     return "@Proceso completado@: Reubicación de activo completado con éxito."
 } catch (Exception e) {
     println("Error al actualizar ubicación del activo ID: ${assetId}, Mensaje: ${e.getMessage()}")
-  
 }
