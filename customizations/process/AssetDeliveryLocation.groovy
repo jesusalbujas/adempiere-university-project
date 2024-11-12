@@ -1,4 +1,3 @@
-// groovy:AssetLocation
 import org.compiere.asset.model.MAsset
 import java.sql.Timestamp
 import org.compiere.util.DB
@@ -39,6 +38,11 @@ def getUserId() {
     }
 }
 
+// Obtener el parámetro A_Asset_Status_Devolution_Proc
+def getStatusDevolutionProc() {
+    return A_ProcessInfo.getParameterAsString("A_Asset_Status_Devolution_Proc")
+}
+
 // Parámetros necesarios
 def ctx = A_Ctx
 def trxName = A_TrxName
@@ -49,11 +53,12 @@ def movementDateAssetString = A_ProcessInfo.getParameterAsString("MovementDateAs
 def assetId = getAssetId()
 def newLocatorId = getNewLocatorId()
 def adUserId = getUserId()
+def assetStatusDevolutionProc = getStatusDevolutionProc()
 
 // Validar que todos los parámetros requeridos estén presentes
-if (assetId == null || newLocatorId == null || adUserId == null) {
+if (assetId == null || newLocatorId == null || adUserId == null || assetStatusDevolutionProc == null) {
     println("Error: Faltan los parámetros requeridos.")
-    return "@Error@ @Faltan los parámetros requeridos (Activo Fijo, Ubicación a Asignar o Usuario).@"
+    return "@Error@ @Faltan los parámetros requeridos (Activo Fijo, Ubicación a Asignar, Usuario o Estado de Devolución).@"
 }
 
 try {
@@ -111,8 +116,9 @@ try {
         INSERT INTO A_Asset_Delivery (
             AD_Client_ID, AD_Org_ID, Created, CreatedBy, IsActive, A_Asset_Delivery_ID,
             Updated, UpdatedBy, UUID, A_Asset_ID, SerNo, JAU01_Location_Assigned,
-            MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID, AD_User_ID) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            MovementDate, MovementDateAsset, IsAssigned, IsMobiliary, IsReubicate, M_Locator_ID, 
+            AD_User_ID, A_Asset_Status_Devolution_Proc) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     DB.executeUpdateEx(insertSql, [
         adClientId,
@@ -133,7 +139,8 @@ try {
         'Y',  // IsMobiliary
         'Y',  // IsReubicate (nombre correcto de la columna)
         newLocatorId,        // Aquí se inserta JAU01_Location_Assigned en M_Locator_ID
-        adUserId
+        adUserId,
+        assetStatusDevolutionProc  // Valor del parámetro A_Asset_Status_Devolution_Proc
     ] as Object[], trxName)
 
     // Actualizar `a_asset_status_actual` en todos los registros con el mismo `A_Asset_ID`
