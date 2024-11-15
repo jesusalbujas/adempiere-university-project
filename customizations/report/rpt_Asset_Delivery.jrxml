@@ -33,7 +33,7 @@
     inf.Logo_ERP AS Logo_ERP,
     mrk.name as marca,
     md.name as modelo,
-    cb.name as encargado
+    CONCAT(adu.name,' ',adu.name2 )as encargado
 FROM
     A_Asset_Delivery ad
 INNER JOIN
@@ -51,7 +51,7 @@ INNER JOIN
 INNER JOIN
 	JAU01_assetmodel md ON md.JAU01_assetmodel_id=fa.JAU01_assetmodel_id
 INNER JOIN 
-	C_bpartner cb ON cb.C_bpartner_id=ad.updatedby
+		AD_user adu ON adu.Ad_user_ID=ad.ad_user_id
 WHERE (ad.A_Asset_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
 AND ad.AD_Org_ID = 50006
 AND ad.A_Asset_Status = 'EU'

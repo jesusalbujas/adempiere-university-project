@@ -27,7 +27,7 @@
 	ds.A_Disposed_Reason,
 	mrk.name as marca,
 	md.name as model,
-	cb.name as encargado,
+	CONCAT(adu.name,' ',adu.name2) as encargado,
 	ds.description as Description
 FROM A_Asset_Disposed ds
 INNER JOIN 
@@ -41,7 +41,7 @@ INNER JOIN
 INNER JOIN
 	JAU01_assetmodel md ON md.JAU01_assetmodel_id=fa.JAU01_assetmodel_id
 INNER JOIN 
-	C_bpartner cb ON cb.C_bpartner_id=ds.updatedby
+	ad_user adu ON adu.ad_user_id=ds.updatedby
 WHERE ds.AD_Org_ID != 0 
 	AND ds.AD_Org_ID = 50006]]>
 	</queryString>
@@ -93,7 +93,6 @@ WHERE ds.AD_Org_ID != 0
 	<field name="encargado" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="encargado"/>
 		<property name="com.jaspersoft.studio.field.label" value="encargado"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
 	</field>
 	<field name="description" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="description"/>

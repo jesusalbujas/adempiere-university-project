@@ -28,7 +28,7 @@
     old.Value AS NameOld,
 	mrk.name as marca,
 	md.name As model,
-	cb.name as encargado
+    CONCAT(adu.name,' ',adu.name2 )as encargado
 FROM A_Asset_delivery ad
 INNER JOIN A_asset fa ON ad.A_Asset_id=fa.a_asset_id
 INNER JOIN M_product mp ON mp.m_product_id=fa.m_product_id
@@ -45,7 +45,7 @@ INNER JOIN
 INNER JOIN
 	JAU01_assetmodel md ON md.jau01_assetmodel_id=fa.jau01_assetmodel_id
 INNER JOIN
-	c_bpartner cb ON cb.c_bpartner_id=ad.updatedby
+	AD_user adu ON adu.Ad_user_ID=ad.ad_user_id
 WHERE ad.AD_Org_ID != 0 
 AND ad.AD_Org_ID = 50006 
 AND ad.IsMobiliary='Y' 

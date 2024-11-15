@@ -27,7 +27,7 @@
 	dv.IsAssigned,
 	mrk.name as marca,
     md.name as modelo,
-    cb.name as encargado
+    CONCAT(adu.name,' ',adu.name2 )as encargado
 FROM A_Asset_Delivery dv
 INNER JOIN 
 	M_Locator m ON dv.M_Locator_ID = m.M_Locator_ID
@@ -44,7 +44,7 @@ INNER JOIN
 INNER JOIN
 	JAU01_assetmodel md ON md.JAU01_assetmodel_id=fa.JAU01_assetmodel_id
 INNER JOIN 
-	C_bpartner cb ON cb.C_bpartner_id=dv.updatedby
+	AD_user adu ON adu.Ad_user_ID=dv.ad_user_id
 WHERE fa.AD_Org_ID = 50006
 AND fa.IsDisposed='N'
 AND fa.IsActive='Y'
@@ -99,7 +99,7 @@ ORDER BY fa.MovementDate DESC]]>
 	<field name="encargado" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="encargado"/>
 		<property name="com.jaspersoft.studio.field.label" value="encargado"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="c_bpartner"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ad_user"/>
 	</field>
 	<title>
 		<band height="78" splitType="Stretch">
