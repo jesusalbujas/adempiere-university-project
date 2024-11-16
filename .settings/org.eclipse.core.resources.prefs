@@ -1,3 +1,6 @@
 eclipse.preferences.version=1
 encoding//customizations/report/transactionals/rpt_Asset.jrxml=UTF-8
+encoding//customizations/report/transactionals/rpt_Asset_Assignation_Mobiliary.jrxml=UTF-8
 encoding//customizations/report/transactionals/rpt_Asset_Delivery.jrxml=UTF-8
+encoding//customizations/report/transactionals/rpt_Asset_Devolution.jrxml=UTF-8
+encoding//customizations/report/transactionals/rpt_Asset_Location.jrxml=UTF-8

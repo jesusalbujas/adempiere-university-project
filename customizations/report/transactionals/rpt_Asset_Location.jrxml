@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.10.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_Asset" pageWidth="850" pageHeight="854" orientation="Landscape" columnWidth="778" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERPCyA"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UNIVERSITY"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -50,6 +50,8 @@ WHERE ad.AD_Org_ID != 0
 AND ad.AD_Org_ID = 50006 
 AND ad.IsMobiliary='Y' 
 AND ad.IsReubicate = 'Y'
+ AND (ad.IsMobiliary='Y') 
+ AND (ad.IsReubicate = 'Y')
 ORDER BY fa.MovementDate DESC]]>
 	</queryString>
 	<field name="logo_erp" class="byte[]">
@@ -137,7 +139,7 @@ ORDER BY fa.MovementDate DESC]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35">
+		<band height="30">
 			<staticText>
 				<reportElement mode="Opaque" x="90" y="0" width="102" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -253,7 +255,7 @@ ORDER BY fa.MovementDate DESC]]>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="35">
+		<band height="30">
 			<textField isBlankWhenNull="true">
 				<reportElement x="90" y="0" width="99" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">

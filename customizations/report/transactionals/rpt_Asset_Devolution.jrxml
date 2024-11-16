@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_Asset" pageWidth="850" pageHeight="854" orientation="Landscape" columnWidth="778" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ERPCyA"/>
+<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.10.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_Asset" pageWidth="900" pageHeight="789" orientation="Landscape" columnWidth="828" leftMargin="44" rightMargin="28" topMargin="20" bottomMargin="20" uuid="e115bc59-fd0f-446b-a585-04725e27d7f0">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UNIVERSITY"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.unit." value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
@@ -19,6 +10,7 @@
 	<parameter name="RECORD_ID" class="java.lang.Integer"/>
 	<parameter name="MovementDate1" class="java.sql.Timestamp"/>
 	<parameter name="MovementDate2" class="java.sql.Timestamp"/>
+	<parameter name="C_BPartner_ID" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[SELECT
     ad.A_Asset_Delivery_ID,
@@ -27,6 +19,7 @@
     mp.name AS AssetName,
     COALESCE(ad.Description, '') AS Description,
     ad.A_Asset_Status,
+    ad.A_Asset_Status_Actual,
     ad.C_BPartner_ID,
 	(ad.Last_Employee_Assigned_ID || ' ' || bp.name2) AssignedEmployee,
     (bp.Name || ' ' || bp.Name2) AS EmployeeName,
@@ -56,6 +49,9 @@ INNER JOIN
 WHERE (ad.A_Asset_ID = $P{RECORD_ID} OR $P{RECORD_ID} IS NULL)
 AND ad.AD_Org_ID = 50006
 AND ad.A_Asset_Status IN ('DB', 'DN', 'RB', 'PR')
+AND (IsTI='Y')
+AND (ad.C_BPartner_ID = $P{C_BPartner_ID} OR $P{C_BPartner_ID} IS NULL)
+AND (IsDevolutionTI = 'Y')
 AND (
     ($P{MovementDate1}::TIMESTAMP IS NOT NULL AND $P{MovementDate2}::TIMESTAMP IS NULL AND ad.MovementDate >= $P{MovementDate1}::TIMESTAMP) OR
     ($P{MovementDate1}::TIMESTAMP IS NULL AND $P{MovementDate2}::TIMESTAMP IS NOT NULL AND ad.MovementDate <= $P{MovementDate2}::TIMESTAMP) OR
@@ -91,6 +87,11 @@ ORDER BY ad.MovementDate ASC]]>
 	<field name="a_asset_status" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="a_asset_status"/>
 		<property name="com.jaspersoft.studio.field.label" value="a_asset_status"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset_delivery"/>
+	</field>
+	<field name="a_asset_status_actual" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="a_asset_status_actual"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_asset_status_actual"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="a_asset_delivery"/>
 	</field>
 	<field name="c_bpartner_id" class="java.math.BigDecimal">
@@ -134,14 +135,14 @@ ORDER BY ad.MovementDate ASC]]>
 	<title>
 		<band height="78" splitType="Stretch">
 			<staticText>
-				<reportElement style="Title" x="279" y="9" width="250" height="64" uuid="1dcadd54-7d50-4470-85ed-189e4d910b25"/>
+				<reportElement style="Title" x="240" y="5" width="300" height="64" uuid="1dcadd54-7d50-4470-85ed-189e4d910b25"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="22" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Devoluciones de Activos]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="641" y="49" width="119" height="20" uuid="13fcf158-58d6-4a39-b352-6fb81db32563"/>
+				<reportElement x="707" y="49" width="119" height="20" uuid="13fcf158-58d6-4a39-b352-6fb81db32563"/>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="14"/>
 				</textElement>
@@ -152,7 +153,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<imageExpression><![CDATA[$F{logo_erp}]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="564" y="20" width="196" height="20" forecolor="#000000" uuid="95484ca0-40b4-4752-95d8-1afbc33c820b"/>
+				<reportElement style="Column header" x="630" y="20" width="196" height="20" forecolor="#000000" uuid="95484ca0-40b4-4752-95d8-1afbc33c820b"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
@@ -161,7 +162,7 @@ ORDER BY ad.MovementDate ASC]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35">
+		<band height="30">
 			<staticText>
 				<reportElement mode="Opaque" x="90" y="0" width="68" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="5c7a4ce8-7248-400c-9ec8-e6d72d27ea3e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -177,7 +178,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Nombre de Activo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="592" y="0" width="88" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
+				<reportElement mode="Opaque" x="570" y="0" width="88" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="79947a83-2163-4879-9db6-9945f932a27a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -219,7 +220,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Estatus]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="680" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="d5a959b7-8093-4d8a-91f7-ee8997b33069">
+				<reportElement mode="Opaque" x="658" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="d5a959b7-8093-4d8a-91f7-ee8997b33069">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -233,7 +234,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<text><![CDATA[Encargado de la Devolucion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="448" y="0" width="144" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="69258e2d-e88b-4241-b2ed-2b5cf0e880b1">
+				<reportElement mode="Opaque" x="448" y="0" width="122" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="69258e2d-e88b-4241-b2ed-2b5cf0e880b1">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -244,7 +245,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Motivo]]></text>
+				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="336" y="0" width="112" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="453463c2-ee99-40c5-841f-f9ac8398f0a5">
@@ -288,10 +289,24 @@ ORDER BY ad.MovementDate ASC]]>
 				</textElement>
 				<text><![CDATA[Modelo]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="738" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1f3a4278-2708-410d-b798-8289f4407092">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#04034F"/>
+					<topPen lineWidth="1.25" lineColor="#040357"/>
+					<bottomPen lineWidth="1.25" lineColor="#040357"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estatus Actual]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="35">
+		<band height="30">
 			<textField isBlankWhenNull="true">
 				<reportElement x="90" y="0" width="68" height="30" uuid="db45aaeb-ec12-4b5e-98e8-f21716330f4f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -300,7 +315,7 @@ ORDER BY ad.MovementDate ASC]]>
 				<textFieldExpression><![CDATA[$F{assetname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="592" y="0" width="88" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
+				<reportElement x="570" y="0" width="88" height="30" uuid="5ecb0fbd-117b-4987-99b2-f3261c964fce"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -335,14 +350,14 @@ ORDER BY ad.MovementDate ASC]]>
 				<textFieldExpression><![CDATA[$F{assignedemployee}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="680" y="0" width="80" height="30" uuid="f4077f1d-a43e-465b-b938-65470a9410b0"/>
+				<reportElement x="658" y="0" width="80" height="30" uuid="f4077f1d-a43e-465b-b938-65470a9410b0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{encargado}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="448" y="0" width="144" height="30" uuid="d5f28fb0-cce3-48ac-96fa-041d221569f3"/>
+				<reportElement x="448" y="0" width="122" height="30" uuid="d5f28fb0-cce3-48ac-96fa-041d221569f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -361,6 +376,14 @@ ORDER BY ad.MovementDate ASC]]>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="738" y="0" width="80" height="30" uuid="e240350a-d213-4a8d-8541-b3f6c1f71540"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_asset_status_actual}.equals("AD") ? "Este activo ha sido asignado" : 
+$F{a_asset_status_actual}.equals("RE") ? "Este activo fue reubicado" : ""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

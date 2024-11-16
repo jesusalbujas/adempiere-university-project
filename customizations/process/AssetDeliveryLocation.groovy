@@ -55,12 +55,6 @@ def newLocatorId = getNewLocatorId()
 def adUserId = getUserId()
 def assetStatusDevolutionProc = getStatusDevolutionProc()
 
-// Validar que todos los parámetros requeridos estén presentes
-if (assetId == null || newLocatorId == null || adUserId == null || assetStatusDevolutionProc == null) {
-    println("Error: Faltan los parámetros requeridos.")
-    return "@Error@ @Faltan los parámetros requeridos (Activo Fijo, Ubicación a Asignar, Usuario o Estado de Devolución).@"
-}
-
 try {
     MAsset asset = new MAsset(ctx, assetId, trxName)
     if (asset == null || asset.getA_Asset_ID() == 0) {
