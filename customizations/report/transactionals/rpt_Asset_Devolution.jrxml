@@ -289,20 +289,6 @@ ORDER BY ad.MovementDate ASC]]>
 				</textElement>
 				<text><![CDATA[Modelo]]></text>
 			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="738" y="0" width="80" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="1f3a4278-2708-410d-b798-8289f4407092">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Estatus Actual]]></text>
-			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
@@ -376,14 +362,6 @@ ORDER BY ad.MovementDate ASC]]>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="738" y="0" width="80" height="30" uuid="e240350a-d213-4a8d-8541-b3f6c1f71540"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{a_asset_status_actual}.equals("AD") ? "Este activo ha sido asignado" : 
-$F{a_asset_status_actual}.equals("RE") ? "Este activo fue reubicado" : ""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
