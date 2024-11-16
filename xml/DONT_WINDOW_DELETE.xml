@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Migrations>
+  <Migration EntityType="JAU01" Name="DONT_WINDOW_DELETE" ReleaseNo="" SeqNo="10300">
+    <Step SeqNo="10" StepType="AD">
+      <PO AD_Table_ID="100" Action="U" Record_ID="209" Table="AD_Table">
+        <Data AD_Column_ID="727" Column="IsDeleteable" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="20" StepType="AD">
+      <PO AD_Table_ID="100" Action="U" Record_ID="208" Table="AD_Table">
+        <Data AD_Column_ID="727" Column="IsDeleteable" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="30" StepType="AD">
+      <PO AD_Table_ID="100" Action="U" Record_ID="291" Table="AD_Table">
+        <Data AD_Column_ID="727" Column="IsDeleteable" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="40" StepType="AD">
+      <PO AD_Table_ID="100" Action="U" Record_ID="1000001" Table="AD_Table">
+        <Data AD_Column_ID="727" Column="IsDeleteable" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="50" StepType="AD">
+      <PO AD_Table_ID="100" Action="U" Record_ID="1000000" Table="AD_Table">
+        <Data AD_Column_ID="727" Column="IsDeleteable" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="60" StepType="AD">
+      <PO AD_Table_ID="100" Action="U" Record_ID="53088" Table="AD_Table">
+        <Data AD_Column_ID="727" Column="IsDeleteable" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="70" StepType="AD">
+      <PO AD_Table_ID="100" Action="U" Record_ID="541" Table="AD_Table">
+        <Data AD_Column_ID="727" Column="IsDeleteable" oldValue="true">false</Data>
+      </PO>
+    </Step>
+  </Migration>
+</Migrations>
