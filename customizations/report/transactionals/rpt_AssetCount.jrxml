@@ -36,6 +36,7 @@ FROM
     AD_ClientInfo inf ON (fa.AD_Client_ID = inf.AD_Client_ID)
 WHERE 
     m.AD_Org_ID = 50006
+ AND (m.M_Product_ID = $P{M_Product_ID} OR $P{M_Product_ID} IS NULL)
 GROUP BY
     m.M_Product_ID, m.Name, inf.Logo_ERP, fa.IsDisposed, fa.IsActive
 HAVING
@@ -131,20 +132,6 @@ m.Name ASC]]>
 				</textElement>
 				<text><![CDATA[Producto]]></text>
 			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="234" y="0" width="124" height="30" forecolor="#FFFFFF" backcolor="#059BE6" uuid="695765eb-0ace-440a-933d-d96ca15e7d75">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.0" lineColor="#04034F"/>
-					<topPen lineWidth="1.25" lineColor="#040357"/>
-					<bottomPen lineWidth="1.25" lineColor="#040357"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tipo de Producto]]></text>
-			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
@@ -162,13 +149,6 @@ m.Name ASC]]>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="234" y="1" width="124" height="30" uuid="d59e8b17-5b07-4a9e-8f8b-c26e7069ff83"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
