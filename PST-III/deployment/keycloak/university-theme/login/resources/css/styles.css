@@ -1,0 +1,257 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+:root {
+  font-size: 14px;
+  --pf-global--BackgroundColor--light-100: #fff;
+  --pf-c-button--m-primary--BackgroundColor: #293055;
+  --pf-global--primary-color--100: #3b97d5;
+  --pf-global--primary-color--200:#293055
+}
+
+.login-pf {
+  background: none;
+  height: 100%;
+  width: 100%;
+}
+
+/* .login-pf body {
+  background-image: url('/resources/img/keycloak-bg.png');
+  font-family: Roboto;
+  height: 100%;
+  margin: 0;
+} */
+
+html {
+  width:100%;
+  height:100%;
+}
+.login-pf body{
+  width:100%;
+  background-image: url('keycloak-bg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#kc-header-wrapper {
+  display: none;
+}
+
+.login-pf-page {
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* .login-pf-page-header {
+  height: 100%;
+  flex: 0 0 35em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  background-color: #fff;
+} */
+
+.card-pf {
+  border-top: 0;
+  margin: 0;
+  flex: 0 0 50em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.logo {
+  width: 40%;
+  margin-left: 30%;
+  margin-bottom: 5%;
+}
+
+.login-pf-page .login-pf-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 2rem;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  height: 48px;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+input[type="submit"] {
+  width: 100%;
+  background-color: #549fbd;
+  color: rgb(60, 60, 60);
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #549fbd;
+}
+
+#kc-form-options .checkbox {
+  padding: 0;
+  margin: 0;
+}
+
+.pf-c-form__label {
+  font-weight: bolder;
+}
+
+.pf-c-button,
+.pf-c-button.pf-m-primary {
+  color: var(--pf-c-button--m-primary--Color);
+  background-color: var(--pf-c-button--m-primary--BackgroundColor);
+}
+
+.pf-m-primary:hover {
+  background-color: #549fbd !important;
+  color: #293055 !important;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  line-height: 1.4rem;
+  padding: 16px 0 16px 0;
+  color: #3b97d5;
+  text-align: center;
+}
+
+.pf-m-error {
+  color: #ff0000 !important;
+}
+
+ /* center the tittle terms and conditions */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.termstext {
+  text-align: justify;
+}
+
+ /* icon terms and conditions */
+.title-with-logo {
+  display: flex;
+  align-items: center;
+}
+
+.title-with-logo svg {
+  margin-right: 10px; /* Space between the logo and the title */
+}
+
+/* Style terms and conditions */
+.button {
+  min-width: 120px;
+  position: relative;
+  cursor: pointer;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: radial-gradient(
+    ellipse at bottom,
+    rgb(7, 79, 187) 0%, /* Royal blue */
+    rgb(30, 95, 235) 45% /* Midnight blue */
+  );
+  color: rgba(255, 255, 255, 0.66); /* White with transparency */
+  transition: all 1s cubic-bezier(0.15, 0.83, 0.66, 1);
+  margin: 0 10px; /* Add margin to separate buttons */
+}
+
+.button::before {
+  content: "";
+  width: 70%;
+  height: 1px;
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%, /* Transparent */
+    rgba(255, 255, 255, 1) 50%, /* White */
+    rgba(255, 255, 255, 0) 100% /* Transparent */
+  );
+  opacity: 0.2;
+  transition: all 1s cubic-bezier(0.15, 0.83, 0.66, 1);
+}
+
+.button:hover {
+  color: rgba(255, 255, 255, 1); /* Full white */
+  transform: scale(1.1) translateY(-3px);
+}
+
+.button:hover::before {
+  opacity: 1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  margin-top: 20px; /* Add some margin on top of buttons */
+}
+
+/* Fin */
+
+.lockout-message {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+@media (max-width: 750px) {
+  .login-pf-page-header,
+  .login-pf body {
+    background-color: #fff;
+  }
+  .login-pf-page {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .login-pf-page-header {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    flex: 0 0 15em;
+  }
+  .card-pf {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+}
+
