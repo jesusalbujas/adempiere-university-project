@@ -1,4 +1,5 @@
 services:
+
   postgresql.service:
     container_name: ${POSTGRES_HOST}
     image: ${POSTGRES_IMAGE}
@@ -8,6 +9,7 @@ services:
     volumes:
       - postgres_volume:/var/lib/postgresql/data
       - ./postgresql/init.sh:/docker-entrypoint-initdb.d/init.sh
+      # - ./postgresql/seed.backup:/tmp/seed.backup # System DB
       - ./postgresql/keycloak.backup:/tmp/keycloak.backup # Keycloak DB
       - ./postgresql/after_run:/tmp/after_run
     healthcheck:
@@ -20,16 +22,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - shared_network
-  
-  adempiere.site:
-    image: ${ADEMPIERE_SITE_IMAGE}
-    container_name: ${ADEMPIERE_SITE_HOST}
-    restart: ${GENERIC_RESTART}
-    environment:
-      ZK_HOST: ${ADEMPIERE_SITE_ZK_HOST}
-      VUE_HOST: ${ADEMPIERE_SITE_VUE_HOST}
-    networks:
-      - shared_network
+
 
   adempiere.zk:
     image: ${ADEMPIERE_ZK_IMAGE}
