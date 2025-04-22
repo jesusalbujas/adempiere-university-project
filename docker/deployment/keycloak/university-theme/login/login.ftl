@@ -93,7 +93,7 @@
           <div id="kc-registration-container">
             <div id="kc-registration">
                     <span>${msg("noAccount")} <a tabindex="6"
-                                                 href="${url.registrationUrl}">${msg("doRegister")}</a></span>
+                                                 href="${url.registrationUrl}" onclick="notifyBackend('${url.registrationUrl}')">${msg("doRegister")}</a></span>
             </div>
           </div>
         </#if>
