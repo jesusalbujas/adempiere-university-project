@@ -30,7 +30,7 @@
   "enabled" : true,
   "sslRequired" : "none",
   "registrationAllowed" : true,
-  "registrationEmailAsUsername" : false,
+  "registrationEmailAsUsername" : true,
   "rememberMe" : true,
   "verifyEmail" : false,
   "loginWithEmailAllowed" : false,
