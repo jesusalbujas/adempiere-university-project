@@ -158,6 +158,18 @@ services:
     networks:
       - shared_network
 
+  api.keycloak.adempiere:
+    image: ${API_KEYCLOAK_IMAGE}
+    container_name: ${API_KEYCLOAK_NAME}
+    restart: ${GENERIC_RESTART}
+    environment:
+      ADEMPIERE_DB_USER: ${ADEMPIERE_DB_USER}
+      ADEMPIERE_DB_PASSWORD: ${ADEMPIERE_DB_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      KEYCLOAK_DB_DATABASE: ${KEYCLOAK_DB_DATABASE}
+      DB_HOST: ${SERVER_NAME}
+      API_PORT: ${API_PORT}
+
 networks:
   shared_network:
     name: ${DEFAULT_NETWORK}
