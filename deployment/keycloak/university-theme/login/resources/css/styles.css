@@ -5,32 +5,30 @@
   --pf-global--BackgroundColor--light-100: #fff;
   --pf-c-button--m-primary--BackgroundColor: #293055;
   --pf-global--primary-color--100: #3b97d5;
-  --pf-global--primary-color--200:#293055
+  --pf-global--primary-color--200: #293055;
 }
 
 .login-pf {
   background: none;
-  height: 100%;
+  height: 100%; /* Asegura que tome toda la altura del padre */
   width: 100%;
 }
 
-/* .login-pf body {
-  background-image: url('/resources/img/keycloak-bg.png');
-  font-family: Roboto;
-  height: 100%;
-  margin: 0;
-} */
-
 html {
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%; /* Asegura que html también ocupe toda la altura */
 }
-.login-pf body{
-  width:100%;
+
+.login-pf body {
+  width: 100%;
+  height: auto; /* Permite que la altura se ajuste al contenido */
+  min-height: 100vh; /* Asegura al menos el 100% de la altura de la ventana */
   background-image: url('keycloak-bg.png');
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
+  background-attachment: fixed; /* ¡Añadido background-attachment: fixed! */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
 }
 
 #kc-header-wrapper {
@@ -42,20 +40,9 @@ html {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  height: 100%;
+  min-height: 100vh; /* Asegura al menos el 100% de la altura de la ventana */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-
-/* .login-pf-page-header {
-  height: 100%;
-  flex: 0 0 35em;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  border-top-left-radius: 50px;
-  border-bottom-left-radius: 50px;
-  background-color: #fff;
-} */
 
 .card-pf {
   border-top: 0;
@@ -64,17 +51,20 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
-  border-top-left-radius: 50px;
-  border-bottom-left-radius: 50px;
+  border-radius: 50px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow: auto;
+  scroll-behavior: smooth;
+  background-color: var(--pf-global--BackgroundColor--light-100);
+  padding: 20px;
 }
 
 .logo {
   width: 40%;
-  margin-left: 30%;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 5%;
+  display: block;
 }
 
 .login-pf-page .login-pf-header h1 {
@@ -83,13 +73,15 @@ html {
   font-weight: 700;
   line-height: 2rem;
   text-align: center;
+  margin-top: 5vh;
+  margin-bottom: 20px;
 }
 
 input[type="text"],
 input[type="password"],
 select {
   height: 48px;
-  width: 100%;
+  width: calc(100% - 40px);
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -104,14 +96,15 @@ input[type="submit"] {
   background-color: #549fbd;
   color: rgb(60, 60, 60);
   padding: 14px 20px;
-  margin: 8px 0;
+  margin: 16px 0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 input[type="submit"]:hover {
-  background-color: #549fbd;
+  background-color: #458aa6;
 }
 
 #kc-form-options .checkbox {
@@ -121,53 +114,65 @@ input[type="submit"]:hover {
 
 .pf-c-form__label {
   font-weight: bolder;
+  margin-bottom: 5px;
 }
 
 .pf-c-button,
 .pf-c-button.pf-m-primary {
   color: var(--pf-c-button--m-primary--Color);
   background-color: var(--pf-c-button--m-primary--BackgroundColor);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
 }
 
 .pf-m-primary:hover {
   background-color: #549fbd !important;
-  color: #293055 !important;
+  color: #fff !important;
 }
 
 .login-subtitle {
   font-size: 1rem;
   line-height: 1.4rem;
-  padding: 16px 0 16px 0;
+  padding: 16px 0;
   color: #3b97d5;
   text-align: center;
 }
 
 .pf-m-error {
   color: #ff0000 !important;
+  margin-top: 5px;
+  display: block;
 }
 
- /* center the tittle terms and conditions */
 .header-content {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
 .termstext {
   text-align: justify;
+  margin-bottom: 20px;
 }
 
- /* icon terms and conditions */
 .title-with-logo {
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
 }
 
 .title-with-logo svg {
-  margin-right: 10px; /* Space between the logo and the title */
+  margin-right: 10px;
+  width: 24px;
+  height: 24px;
 }
 
-/* Style terms and conditions */
 .button {
   min-width: 120px;
   position: relative;
@@ -176,14 +181,11 @@ input[type="submit"]:hover {
   border: 0;
   border-radius: 7px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  background: radial-gradient(
-    ellipse at bottom,
-    rgb(7, 79, 187) 0%, /* Royal blue */
-    rgb(30, 95, 235) 45% /* Midnight blue */
-  );
-  color: rgba(255, 255, 255, 0.66); /* White with transparency */
-  transition: all 1s cubic-bezier(0.15, 0.83, 0.66, 1);
-  margin: 0 10px; /* Add margin to separate buttons */
+  background: radial-gradient(ellipse at bottom, rgb(7, 79, 187) 0%, rgb(30, 95, 235) 45%);
+  color: rgba(255, 255, 255, 0.66);
+  transition: all 0.3s ease-in-out;
+  margin: 0 10px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .button::before {
@@ -193,32 +195,25 @@ input[type="submit"]:hover {
   position: absolute;
   bottom: 0;
   left: 15%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%, /* Transparent */
-    rgba(255, 255, 255, 1) 50%, /* White */
-    rgba(255, 255, 255, 0) 100% /* Transparent */
-  );
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
   opacity: 0.2;
-  transition: all 1s cubic-bezier(0.15, 0.83, 0.66, 1);
+  transition: all 0.3s ease-in-out;
 }
 
 .button:hover {
-  color: rgba(255, 255, 255, 1); /* Full white */
-  transform: scale(1.1) translateY(-3px);
+  color: rgba(255, 255, 255, 1);
+  transform: scale(1.05) translateY(-2px);
 }
 
 .button:hover::before {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .form-actions {
   display: flex;
-  justify-content: center; /* Center buttons horizontally */
-  margin-top: 20px; /* Add some margin on top of buttons */
+  justify-content: center;
+  margin-top: 20px;
 }
-
-/* Fin */
 
 .lockout-message {
   position: fixed;
@@ -229,29 +224,70 @@ input[type="submit"]:hover {
   color: #721c24;
   border: 1px solid #f5c6cb;
   border-radius: 5px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
 }
-
 
 @media (max-width: 750px) {
-  .login-pf-page-header,
-  .login-pf body {
-    background-color: #fff;
-  }
   .login-pf-page {
+    padding: 20px;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    min-height: auto; /* Permite que la altura se ajuste en pantallas pequeñas */
   }
-  .login-pf-page-header {
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    flex: 0 0 15em;
+
+  .login-pf body {
+    background-color: #fff;
+    background-image: none;
+    min-height: 100vh; /* Mantiene la altura mínima en pantallas pequeñas también */
   }
+
   .card-pf {
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+    flex: 0 0 auto;
+    width: 90%;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 15px;
+  }
+
+  .login-pf-page .login-pf-header h1 {
+    margin-top: 2vh;
+    font-size: 1.5rem;
+  }
+
+  .logo {
+    width: 60%;
+    margin-bottom: 10px;
+  }
+
+  .login-subtitle {
+    font-size: 0.9rem;
+    padding: 10px 0;
+  }
+
+  .termstext {
+    font-size: 0.9rem;
+  }
+
+  .title-with-logo svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .button {
+    min-width: 100px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    margin: 0 5px;
+  }
+
+  .form-actions {
+    margin-top: 15px;
+  }
+
+  .lockout-message {
+    font-size: 12px;
+    padding: 8px;
   }
 }
-
