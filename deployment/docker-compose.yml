@@ -26,8 +26,8 @@ services:
     image: ${ADEMPIERE_SITE_IMAGE}
     container_name: ${ADEMPIERE_SITE_HOST}
     restart: ${GENERIC_RESTART}
-    # ports:
-    #   - ${ADEMPIERE_SITE_PORT}:80
+    ports:
+      - ${ADEMPIERE_SITE_PORT}:80
     environment:
       ZK_HOST: ${ADEMPIERE_SITE_ZK_HOST}
       VUE_HOST: ${ADEMPIERE_SITE_VUE_HOST}
