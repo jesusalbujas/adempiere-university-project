@@ -1,4 +1,4 @@
-// groovy:JAU01_UniqueTaxID
+// groovy:01_PST_UniqueTaxID
 import org.compiere.model.PO;
 import org.compiere.model.Query;
 PO entity = A_PO;
@@ -8,7 +8,7 @@ try {
   if(currentName != null) {
     int referenceId = new Query(A_Ctx, tableName, "UPPER(TRIM(TaxID)) = UPPER(TRIM(?)) AND " + tableName + "_ID <> ?", entity.get_TrxName()).setParameters(currentName, entity.get_ID()).setClient_ID().firstId();
     if(referenceId > 0) {
-        return "@Error@ Número de Identificación ya existe";
+        return "Número de Identificación ya existe";
     }
   }
 	result = "";
